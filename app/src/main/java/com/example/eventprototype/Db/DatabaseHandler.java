@@ -9,12 +9,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.media.metrics.Event;
 
 import com.example.eventprototype.Model.EventModel;
+import com.example.eventprototype.User;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
+    final private String unswDatabase= "jdbc:sqlite:unswDatabase.db";
 
     private static final int VERSION = 1;
     private static final String NAME = "EventListDatabase";
@@ -25,6 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String START_TIME = "eventStartTime";
     private static final String END_TIME= "eventFinishTime";
     private static final String LOCATION = "eventLocation";
+    private int isStaff = 0;
 
     //SQL query to create table
     private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + END_TIME + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER)";
@@ -33,6 +43,72 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public DatabaseHandler(Context context) {
         super(context, NAME, null, VERSION);
+    }
+
+    //Creating tables
+    public void setUpDatabase() throws SQLException {
+        // Connect to Database
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:unswDatabase.db");
+        Statement st = conn.createStatement();
+
+        // Create User with password, username
+        String createUser = "CREATE TABLE IF NOT EXISTS USERS"
+                + "(id INTEGER PRIMARY KEY AUTOINCREMENT"
+                + ", username TEXT NOT NULL"
+                + ", password TEXT NOT NULL"
+                + ", isStaff INTEGER NOT NULL"
+                + ");";
+        st.execute(createUser);
+
+        st.close();
+        conn.close();
+    }
+
+    //insert users custom
+    public void insertUsers(int id, String username, String password, int isStaff) throws SQLException{
+        //create connection
+        Connection conn = DriverManager.getConnection(unswDatabase);
+        //create statement
+        Statement st = conn.createStatement();
+
+        //write the SQL query and the java code to insert all attributes
+        PreparedStatement pSt = conn.prepareStatement(
+                "INSERT OR IGNORE INTO USERS (id,username,password,isStaff) VALUES (?,?,?,?)"
+        );
+
+        pSt.setInt(1, id);
+        pSt.setString(2, username);
+        pSt.setString(3, password);
+        pSt.setInt(4, isStaff);
+        pSt.executeUpdate();
+
+        st.close();
+        conn.close();
+    }
+
+    public boolean login(String username, String password, boolean isStaff) throws SQLException {
+        boolean userExists;
+
+        Connection conn = DriverManager.getConnection(unswDatabase);
+        PreparedStatement pst = conn.prepareStatement(
+                "SELECT * FROM Users WHERE USERNAME = ? AND PASSWORD = ?"
+        );
+        pst.setString(1, username);
+        pst.setString(2, password);
+        ResultSet rs = pst.executeQuery();
+
+        // Check if user exists - if so return true, else return false
+        int rowCount = 0;
+        while(rs.next()) {
+            rowCount++;
+        }
+
+        if(rowCount > 0) {
+            userExists = true;
+        } else {
+            userExists = false;
+        }
+        return userExists;
     }
 
     @Override
