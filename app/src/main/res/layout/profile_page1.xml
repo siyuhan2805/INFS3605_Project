@@ -36,53 +36,57 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profile_avatar"
         android:layout_width="110dp"
         android:layout_height="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/avatar"
-        tools:layout_editor_absoluteY="44dp" />
+        tools:layout_editor_absoluteY="44dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Henry Han"
-        android:textColor="#000000"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/profile_avatar"
         app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        tools:layout_editor_absoluteY="201dp" />
+        app:layout_constraintStart_toStartOf="@+id/profile_avatar"
+        tools:layout_editor_absoluteY="201dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HenryHan@gmail.com"
-        android:textColor="#000000"
+        android:text="z5314769@ad.unsw.edu.au"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/profile_name"
         app:layout_constraintHorizontal_bias="0.482"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintStart_toStartOf="@+id/profile_name"
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/profile_details_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/profile_whitebackground"
+        android:background="#282B33"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/profile_email">
 
         <LinearLayout
+            android:id="@+id/profile_detail_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/profile_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
@@ -91,13 +95,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView21"
+                    android:id="@+id/profile_image_settings"
                     android:layout_width="102dp"
                     android:layout_height="93dp"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/profile_name_settings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -110,6 +114,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/profile_notifications"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
@@ -118,13 +123,13 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView21"
+                    android:id="@+id/profile_image_notifications"
                     android:layout_width="102dp"
                     android:layout_height="93dp"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/profile_name_notifications"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -137,6 +142,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/profile_saved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="18dp"
@@ -145,17 +151,17 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView21"
+                    android:id="@+id/profile_image_saved"
                     android:layout_width="102dp"
                     android:layout_height="93dp"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
-                    android:id="@+id/textView14"
+                    android:id="@+id/profile_name_saved"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Payment"
+                    android:text="Saved "
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="14sp"
@@ -166,120 +172,124 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_infobox_DOB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="18dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/profile_title_DOB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="DOB"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18sp"
 
                 />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/profile_text_DOB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="1/1/2001"
                 android:textAlignment="viewEnd"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18dp" />
 
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_infobox_mobile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="18dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/profile_title_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Mobile"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18sp"
 
                 />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/profile_text_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="0415886531"
                 android:textAlignment="viewEnd"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18dp" />
 
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_infobox_studentID"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="18dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/profile_title_studentID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Student ID"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18sp"
 
                 />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/profile_text_studentID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="z5314769"
                 android:textAlignment="viewEnd"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18dp" />
 
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/profile_infobox_degree"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="18dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/profile_title_degree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Degree"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18sp"
 
                 />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/profile_text_degree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Information Systems"
                 android:textAlignment="viewEnd"
-                android:textColor="#5917e1"
+                android:textColor="@color/white"
                 android:textSize="18dp" />
 
 
@@ -291,12 +301,12 @@
         android:id="@+id/button"
         android:layout_width="111dp"
         android:layout_height="50dp"
+        android:layout_margin="10dp"
         android:layout_marginBottom="8dp"
-        android:text="Button"
+        android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:layout_margin="10dp" />
+        app:layout_constraintEnd_toEndOf="@+id/profile_details_box"
+        app:layout_constraintStart_toStartOf="@+id/profile_details_box"
+        app:layout_constraintTop_toBottomOf="@+id/profile_details_box" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
