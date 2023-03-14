@@ -5,6 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/signLoginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#282B33">
+
+        <ImageView
+            android:id="@+id/unsw_logo_w"
+            android:layout_width="150dp"
+            android:layout_height="63.64dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/logo_white_unsw"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/theme_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="20dp"
+            android:checked="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--TODO fix format of checkbox-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="110dp"
