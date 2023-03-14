@@ -1,4 +1,4 @@
 package com.example.eventprototype;
 
-public class Profile {
+public class ProfileActivity {
 }
