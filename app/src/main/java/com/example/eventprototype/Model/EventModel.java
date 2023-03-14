@@ -1,5 +1,7 @@
 package com.example.eventprototype.Model;
 
+import android.graphics.Bitmap;
+
 public class EventModel {
     //each event has 3 attributes: id, status and event which can be referred to in the database
     private int id, status;
@@ -7,7 +9,17 @@ public class EventModel {
     private String event;
     private String location;
     private String startTime;
-    private String endTime;
+    private String date;
+    private Bitmap eventCoverImage;
+
+
+    public Bitmap getEventCoverImage() {
+        return eventCoverImage;
+    }
+
+    public void setEventCoverImage(Bitmap eventCoverImage) {
+        this.eventCoverImage = eventCoverImage;
+    }
 
     public String getLocation() {
         return location;
@@ -25,12 +37,12 @@ public class EventModel {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getDate() {
+        return date;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public int getId() {
