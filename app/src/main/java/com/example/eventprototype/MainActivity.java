@@ -5,9 +5,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.eventprototype.Adapter.EventAdapter;
 import com.example.eventprototype.Db.DatabaseHandler;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private List<EventModel> eventList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
+
 
 
     @Override

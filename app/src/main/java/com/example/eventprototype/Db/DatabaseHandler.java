@@ -6,10 +6,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 import android.media.metrics.Event;
+import android.widget.Toast;
 
 import com.example.eventprototype.Model.EventModel;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,12 +25,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ID = "id";
     private static final String EVENT = "event";
     private static final String STATUS = "status";
+    private static final String DATE = "eventDate";
+    private static final String IMAGE = "image";
     private static final String START_TIME = "eventStartTime";
-    private static final String END_TIME= "eventFinishTime";
     private static final String LOCATION = "eventLocation";
 
     //SQL query to create table
-    private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + END_TIME + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER)";
+    private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + DATE + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER, " + IMAGE + "BLOB)";
     //reference of the database
     private SQLiteDatabase db;
 
@@ -64,7 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //no ID needed as that is already auto-incremented
         cv.put(EVENT, event.getEvent());
         cv.put(START_TIME, event.getStartTime());
-        cv.put(END_TIME, event.getEndTime());
+        cv.put(DATE, event.getDate());
         cv.put(LOCATION, event.getLocation());
         cv.put(STATUS, 0);
         //insert the above info into the table below
@@ -90,7 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         event.setId(cursor.getInt(cursor.getColumnIndex(ID)));
                         event.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
                         event.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
-                        event.setEndTime(cursor.getString(cursor.getColumnIndex(END_TIME)));
+                        event.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
                         event.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
                         event.setStatus(cursor.getInt(cursor.getColumnIndex(STATUS)));
                         //adds event object to the eventList
@@ -104,6 +108,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             cursor.close();
         }
         return eventList;
+    }
+
+    public void storeImage(EventModel eventModel) {
+        try {
+            db = this.getWritableDatabase();
+            Bitmap imageToStoreBitmap = eventModel.getEventCoverImage();
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     //method for updating status
@@ -129,9 +144,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
     }
 
-    public void updateEndTime(int id, String endTime) {
+    public void updateDate(int id, String endTime) {
         ContentValues cv = new ContentValues();
-        cv.put(END_TIME, endTime);
+        cv.put(DATE, endTime);
         db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
     }
 

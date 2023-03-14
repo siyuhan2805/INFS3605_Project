@@ -53,7 +53,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventTitle.setText(item.getEvent());
         holder.eventLocation.setText(item.getLocation());
         holder.eventStartTime.setText(item.getStartTime());
-        holder.eventFinishTime.setText(item.getEndTime());
+        holder.eventDate.setText(item.getDate());
 
         /* phasing out checkBox feature until required - every time you check or uncheck box, got to update database
         holder.eventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -119,14 +119,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView eventStartTime;
-        TextView eventFinishTime;
+        TextView eventDate;
         TextView eventLocation;
         TextView eventTitle;
 
         ViewHolder(View view) {
             super(view);
             eventStartTime = view.findViewById(R.id.eventStartTime);
-            eventFinishTime = view.findViewById(R.id.eventFinishTime);
+            eventDate = view.findViewById(R.id.eventDate);
             eventLocation = view.findViewById(R.id.eventLocation);
             eventTitle = view.findViewById(R.id.eventTitle);
         }
