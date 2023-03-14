@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rectangle_gradient_shape_square_corners">
+    android:background="#99BF81FF">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/menu_heading"
+            android:id="@+id/toolbar_heading_logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/logoutIcon"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="8dp"
-            app:srcCompat="@drawable/ic_log_out" />
+            app:srcCompat="@drawable/ic_logout" />
     </RelativeLayout>
 
 </RelativeLayout>
