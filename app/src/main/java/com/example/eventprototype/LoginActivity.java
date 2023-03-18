@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +23,16 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseHandler database = new DatabaseHandler(this);
     //TODO: fix later
     private boolean isStaff = false;
+    private TextView menuTitle;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_only);
+        menuTitle.setText("");
 
         loginBtn = findViewById(R.id.loginBtn);
         signUpBtn = findViewById(R.id.loginSignupBtn);

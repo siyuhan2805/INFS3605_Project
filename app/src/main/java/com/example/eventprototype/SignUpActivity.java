@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,10 +25,15 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean isStaff = false;
     private EditText signUpPasswordEt;
     private EditText signUpZidEt;
+    private TextView menuTitle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_only);
+        menuTitle.setText("");
 
         btnSignUp = findViewById(R.id.signUpBtn);
         btnLogin = findViewById(R.id.signLoginBtn);
