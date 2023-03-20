@@ -3,7 +3,6 @@ package com.example.eventprototype.Model;
 import android.graphics.Bitmap;
 
 public class EventModel {
-    //each event has 3 attributes: id, status and event which can be referred to in the database
     private int id, status;
     //"event" is the name of the event in SQLITE
     private String event;

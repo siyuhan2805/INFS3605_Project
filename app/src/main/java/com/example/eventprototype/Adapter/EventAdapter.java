@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,9 @@ import com.example.eventprototype.R;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
@@ -53,21 +57,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         holder.eventTitle.setText(item.getEvent());
         holder.eventLocation.setText(item.getLocation());
         holder.eventStartTime.setText(item.getStartTime());
-        holder.eventDate.setText(item.getDate());
+        String oldDate = item.getDate();
+        String convertedDate = null;
+        try {
+            convertedDate = convertDateFormat(oldDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        holder.eventDate.setText(convertedDate);
+        holder.eventImage.setImageBitmap(item.getEventCoverImage());
 
-        /* phasing out checkBox feature until required - every time you check or uncheck box, got to update database
-        holder.eventCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    db.updateStatus(item.getId(), 1);
-                }
-                else {
-                    db.updateStatus(item.getId(), 0);
-                }
-            }
-        });
-         */
     }
 
     @Override
@@ -89,6 +88,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     public void setEvents(List<EventModel> eventList) {
         this.eventList = eventList;
         notifyDataSetChanged();
+    }
+
+    //function to convert from yyyy/MM/dd format of the db to dd/MM/yyyy to display
+    public String convertDateFormat(String oldDate) throws ParseException {
+        SimpleDateFormat input = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        Date converted = input.parse(oldDate);
+        String newDate = output.format(converted);
+        return newDate;
     }
 
 
@@ -122,6 +130,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         TextView eventDate;
         TextView eventLocation;
         TextView eventTitle;
+        ImageView eventImage;
 
         ViewHolder(View view) {
             super(view);
@@ -129,7 +138,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
             eventDate = view.findViewById(R.id.eventDate);
             eventLocation = view.findViewById(R.id.eventLocation);
             eventTitle = view.findViewById(R.id.eventTitle);
+            eventImage = view.findViewById(R.id.eventImage);
+            //sets the corner radius to rounded as in rounded_rectangle.xml
+            eventImage.setClipToOutline(true);
+
         }
 
     }
+
+
 }

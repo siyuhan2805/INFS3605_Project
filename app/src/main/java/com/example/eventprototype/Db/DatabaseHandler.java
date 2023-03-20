@@ -7,11 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.metrics.Event;
 import android.widget.Toast;
 
 import com.example.eventprototype.Model.EventModel;
 
+import java.io.ByteArrayOutputStream;
+import java.net.ConnectException;
 import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +34,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String LOCATION = "eventLocation";
 
     //SQL query to create table
-    private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + DATE + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER, " + IMAGE + "BLOB)";
+    private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + DATE + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER, " + IMAGE + " BLOB)";
     //reference of the database
     private SQLiteDatabase db;
 
+    private ByteArrayOutputStream byteArrayOutputStream;
+    private byte[] imageInBytes;
     public DatabaseHandler(Context context) {
         super(context, NAME, null, VERSION);
     }
@@ -71,8 +76,49 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cv.put(DATE, event.getDate());
         cv.put(LOCATION, event.getLocation());
         cv.put(STATUS, 0);
+        /*prepping for the image insert as setters are storing image as a bitmap but we have to convert
+          to bytes before storing
+         */
+        Bitmap imageToStoreBitmap = event.getEventCoverImage();
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        imageToStoreBitmap.compress(Bitmap.CompressFormat.JPEG,100, byteArrayOutputStream);
+        //convert image to an array of bytes for storage in database
+        imageInBytes = byteArrayOutputStream.toByteArray();
+        //bytes to be stored and passed in ContentValues
+        cv.put(IMAGE, imageInBytes);
         //insert the above info into the table below
         db.insert(EVENT_TABLE, null, cv);
+    }
+
+    @SuppressLint("Range")
+    public List<EventModel> getAllUpcomingEvents(String startDate, String endDate) {
+        List<EventModel> upEventList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + EVENT_TABLE +
+                " WHERE " + DATE +
+                " BETWEEN ? AND ?", new String[]{startDate, endDate});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    EventModel upComingEvent = new EventModel();
+                    upComingEvent.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                    upComingEvent.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
+                    upComingEvent.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
+                    upComingEvent.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+                    upComingEvent.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
+                    upComingEvent.setStatus(cursor.getInt(cursor.getColumnIndex(STATUS)));
+                    //convert the stored db images into Bitmap as they are stored as bytes
+                    byte [] dbBytesImage = cursor.getBlob(cursor.getColumnIndex(IMAGE));
+                    Bitmap objectBitmap = BitmapFactory.decodeByteArray(dbBytesImage, 0, dbBytesImage.length);
+                    //setting the getters/setters
+                    upComingEvent.setEventCoverImage(objectBitmap);
+                    //adds event object to the eventList
+                    upEventList.add(upComingEvent);
+
+
+                } while (cursor.moveToNext());
+            }
+        }
+        return upEventList;
     }
 
     //get all events from the db and store it in our List eventList
@@ -97,6 +143,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         event.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
                         event.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
                         event.setStatus(cursor.getInt(cursor.getColumnIndex(STATUS)));
+                        //convert the stored db images into Bitmap as they are stored as bytes
+                        byte [] dbBytesImage = cursor.getBlob(cursor.getColumnIndex(IMAGE));
+                        Bitmap objectBitmap = BitmapFactory.decodeByteArray(dbBytesImage, 0, dbBytesImage.length);
+                        //setting the getters/setters
+                        event.setEventCoverImage(objectBitmap);
                         //adds event object to the eventList
                         eventList.add(event);
                     }while (cursor.moveToNext());
@@ -110,16 +161,35 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return eventList;
     }
 
+    /*
     public void storeImage(EventModel eventModel) {
         try {
             db = this.getWritableDatabase();
             Bitmap imageToStoreBitmap = eventModel.getEventCoverImage();
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            imageToStoreBitmap.compress(Bitmap.CompressFormat.JPEG,100, byteArrayOutputStream);
+            //convert image to an array of bytes for storage in database
+            imageInBytes = byteArrayOutputStream.toByteArray();
+            ContentValues cv = new ContentValues();
+            cv.put(IMAGE, imageInBytes);
+            long checkIfQueryRuns = db.insert(EVENT_TABLE, null, cv);
+            if(checkIfQueryRuns != 0) {
+                System.out.println("Data added into our db table");
+                //db.close()
+            }
+            else {
+                System.out.println("Data add failed");
+            }
 
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+
+     */
+
+
 
     //method for updating status
     public void updateStatus(int id, int status) {
@@ -160,4 +230,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void deleteEvent(int id) {
         db.delete(EVENT_TABLE, ID + "=?", new String[] {String.valueOf(id)});
     }
+
+
 }

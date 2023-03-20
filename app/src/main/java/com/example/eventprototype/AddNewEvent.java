@@ -33,8 +33,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddNewEvent extends DialogFragment {
@@ -198,16 +200,25 @@ public class AddNewEvent extends DialogFragment {
                 //pulls all the user inputs from the respective editable fields
                 String title = eventTitle.getText().toString();
                 String startTime = eventStartTime.getText().toString();
-                String date = eventDate.getText().toString();
+                String oldDate = eventDate.getText().toString();
+                //converting the date to YYYY-MM-DD format before storage
+                String newDate = null;
+                try {
+                    newDate = convertDateFormat(oldDate);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 String location = eventLocation.getText().toString();
                 //initialise the Event object
                 EventModel event = new EventModel();
                 //setting the setters of the Event object to reflect in the RecyclerView adapter
                 event.setEvent(title);
                 event.setStartTime(startTime);
-                event.setDate(date);
+                event.setDate(newDate);
                 event.setLocation(location);
                 event.setStatus(0);
+                //setting the bitmap of the image selected
+                event.setEventCoverImage(imageToStore);
                 //insert the created Event into the database
                 db.insertEvent(event);
                 dismiss();
@@ -343,6 +354,31 @@ public class AddNewEvent extends DialogFragment {
         eventDate.setText(dateFormat.format(myCalendar.getTime()));
     }
 
+    public String convertDateFormat(String oldDate) throws ParseException {
+        SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat output = new SimpleDateFormat("yyyy/MM/dd");
+        Date converted = input.parse(oldDate);
+        String newDate = output.format(converted);
+        System.out.println(newDate);
+        return newDate;
+    }
+
+    /*
+    public void storeImage(View view) {
+        try {
+            if (eventCoverPhoto.getDrawable() != null && imageToStore != null) {
+                db.storeImage(new EventModel());
+            }
+            else {
+                System.out.println("No image selected");
+            }
+        }
+
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    */
 
     //this method is to ensure after updating the db, the RecyclerView is immediately updated
     @Override

@@ -13,20 +13,26 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.eventprototype.Adapter.EventAdapter;
+import com.example.eventprototype.Adapter.UpcomingEventsAdapter;
 import com.example.eventprototype.Db.DatabaseHandler;
 import com.example.eventprototype.Model.EventModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements DialogCloseListener{
 
-    private RecyclerView eventsRecyclerView;
+    private RecyclerView eventsRecyclerView, upcomingEventsRecyclerView;
     private EventAdapter adapter;
-    private List<EventModel> eventList;
+    private UpcomingEventsAdapter upcomingEventsAdapter;
+    private List<EventModel> eventList, upEventList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
 
@@ -53,6 +59,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         //initialise eventList
         eventList = new ArrayList<>();
 
+        //initialise upcoming events recyclerview
+        upcomingEventsRecyclerView = findViewById(R.id.upcomingEventsRecyclerView);
+        upcomingEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        //setting upcomingEventsAdapter to the RecyclerView;
+        upcomingEventsAdapter = new UpcomingEventsAdapter(db, this);
+        upcomingEventsRecyclerView.setAdapter(upcomingEventsAdapter);
+
         eventsRecyclerView = findViewById(R.id.eventsRecyclerView);
         eventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //set the adapter to the RecyclerView
@@ -62,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         eventList = db.getAllEvents();
         Collections.reverse(eventList);
         adapter.setEvents(eventList);
+
+        //populating the List with events that are due to happen in the next 7 days
+        upEventList = db.getAllUpcomingEvents(todayDate(), threeDayDate());
+        Collections.reverse(upEventList);
+        upcomingEventsAdapter.setUpComingEvents(upEventList);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,10 +92,33 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     @Override
     public void handleDialogClose(DialogInterface dialog) {
         eventList = db.getAllEvents();
+        upEventList = db.getAllUpcomingEvents(todayDate(), threeDayDate());
         //this ensures that the most recent event is on top of the eventList
         Collections.reverse(eventList);
         adapter.setEvents(eventList);
         adapter.notifyDataSetChanged();
 
+        Collections.reverse(upEventList);
+        upcomingEventsAdapter.setUpComingEvents(upEventList);
+        upcomingEventsAdapter.notifyDataSetChanged();
+
+    }
+
+    public String todayDate() {
+        String todayDate = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
+        System.out.println(todayDate);
+        return todayDate;
+    }
+
+    public String threeDayDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+        Calendar cDate = Calendar.getInstance();
+        Date today = cDate.getTime();
+        cDate.add(Calendar.DATE, 3);
+        Date future = cDate.getTime();
+        String futureDate = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(future);
+        System.out.println(futureDate);
+
+        return futureDate;
     }
 }
