@@ -1,20 +1,14 @@
-package com.example.eventprototype;
+package com.example.eventprototype.Model;
 
-public class User {
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
     //attributes
     private int id;
+    private int isStaff;
     private String username;
     private String password;
 
-    public User() {
-
-    }
-
-    public User(int id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
 
     public int getId() {
         return id;
@@ -40,4 +34,11 @@ public class User {
         this.password = password;
     }
 
+    public int getIsStaff() {
+        return isStaff;
+    }
+
+    public void setIsStaff(int isStaff) {
+        this.isStaff = isStaff;
+    }
 }

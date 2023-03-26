@@ -16,6 +16,7 @@ import com.example.eventprototype.Adapter.EventAdapter;
 import com.example.eventprototype.Adapter.UpcomingEventsAdapter;
 import com.example.eventprototype.Db.DatabaseHandler;
 import com.example.eventprototype.Model.EventModel;
+import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private EventAdapter adapter;
     private UpcomingEventsAdapter upcomingEventsAdapter;
     private List<EventModel> eventList, upEventList;
+    private ArrayList<UserModel> userList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
 
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        //get the intent passed from the LoginActivity
+        userList = getIntent().getParcelableExtra("userList");
         //initialise fab
         fab = findViewById(R.id.fab);
         //initialise db

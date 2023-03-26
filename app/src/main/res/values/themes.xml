@@ -30,6 +30,12 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#99BF81FF</item>
+
+    </style>
+
+
 
 
 </resources>

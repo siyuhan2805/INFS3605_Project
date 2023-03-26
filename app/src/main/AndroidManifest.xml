@@ -28,6 +28,22 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".StartActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".SignUpActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

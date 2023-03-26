@@ -12,6 +12,7 @@ import android.media.metrics.Event;
 import android.widget.Toast;
 
 import com.example.eventprototype.Model.EventModel;
+import com.example.eventprototype.Model.UserModel;
 
 import java.io.ByteArrayOutputStream;
 import java.net.ConnectException;
@@ -25,17 +26,53 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String NAME = "EventListDatabase";
     private static final String EVENT_TABLE = "eventList";
-    private static final String ID = "id";
+    private static final String EVENT_ID = "eventId";
     private static final String EVENT = "event";
     private static final String STATUS = "status";
     private static final String DATE = "eventDate";
     private static final String IMAGE = "image";
     private static final String START_TIME = "eventStartTime";
     private static final String LOCATION = "eventLocation";
+    private static final String USER_TABLE = "userList";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String STAFF = "isStaff";
+    private static final String USER_ID = "userId";
+    private static final String ENGAGEMENT_TABLE = "engagement";
+    private static final String ENGAGEMENT_ID = "engagementId";
+    private static final String ISJOIN = "isJoin";
 
-    //SQL query to create table
-    private static final String CREATE_EVENT_TABLE = "CREATE TABLE " + EVENT_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + EVENT + " TEXT, " + START_TIME + " TEXT, " + DATE + " TEXT, " + LOCATION + " TEXT, " + STATUS + " INTEGER, " + IMAGE + " BLOB)";
-    //reference of the database
+
+    //SQL query to create engagement table
+    private static final String CREATE_ENGAGEMENT_TABLE = "CREATE TABLE "
+            + ENGAGEMENT_TABLE + "("
+            + ENGAGEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ISJOIN + " INTEGER, "
+            + USER_ID + " INTEGER, "
+            + EVENT_ID + " INTEGER, "
+            + "FOREIGN KEY" + "(" + USER_ID + ")" + " REFERENCES " + USER_TABLE + "(" + USER_ID + "),"
+            + " FOREIGN KEY" + "(" + EVENT_ID + ")" + " REFERENCES " + EVENT_TABLE + "(" + EVENT_ID + "))";
+
+    //SQL query to create events table
+    private static final String CREATE_EVENT_TABLE = "CREATE TABLE "
+            + EVENT_TABLE + "("
+            + EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + EVENT + " TEXT, "
+            + START_TIME + " TEXT, "
+            + DATE + " TEXT, "
+            + LOCATION + " TEXT, "
+            + STATUS + " INTEGER, "
+            + IMAGE + " BLOB, "
+            + USER_ID + " INTEGER, "
+            + "FOREIGN KEY" + "(" + USER_ID + ")" + " REFERENCES " + USER_TABLE + "(" + USER_ID + "))";
+
+    //SQL query to create users table
+    private static final String CREATE_USERS_TABLE = "CREATE TABLE "
+            + USER_TABLE + "("
+            + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + USERNAME + " TEXT, "
+            + PASSWORD + " TEXT, "
+            + STAFF + " INTEGER)";
     private SQLiteDatabase db;
 
     private ByteArrayOutputStream byteArrayOutputStream;
@@ -46,9 +83,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + ENGAGEMENT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + EVENT_TABLE);
-        //query to create a new table to ensure there is a table when the db is created
+        db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
+        //query to create the users table
+        db.execSQL(CREATE_USERS_TABLE);
+        //query to create the events table
         db.execSQL(CREATE_EVENT_TABLE);
+        //query to create the engagement table
+        db.execSQL(CREATE_ENGAGEMENT_TABLE);
+
 
     }
 
@@ -65,6 +109,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void openDatabase() {
         //opens the db as writeable
         db = this.getWritableDatabase();
+    }
+
+    public void insertUser(UserModel user) {
+        ContentValues cv = new ContentValues();
+        //no ID needed as that is already auto-incremented
+        cv.put(USERNAME, user.getUsername());
+        cv.put(PASSWORD, user.getPassword());
+        cv.put(STAFF, user.getIsStaff());
+        //insert the above info into the USERS table
+        db.insert(USER_TABLE, null, cv);
     }
 
     public void insertEvent(EventModel event) {
@@ -91,6 +145,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
+    public List<UserModel> getUser(String username, String password) {
+        List<UserModel> userList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + USER_TABLE +
+                " WHERE " + USERNAME + " = ? AND " + PASSWORD + " = ? ", new String[]{username, password});
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    UserModel user = new UserModel();
+                    user.setId(cursor.getInt(cursor.getColumnIndex(USER_ID)));
+                    user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
+                    user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                    user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    //returns the user information should it have the correct login details
+                    userList.add(user);
+
+                } while (cursor.moveToNext());
+            }
+        }
+        return userList;
+    }
+
+    @SuppressLint("Range")
     public List<EventModel> getAllUpcomingEvents(String startDate, String endDate) {
         List<EventModel> upEventList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + EVENT_TABLE +
@@ -100,7 +176,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     EventModel upComingEvent = new EventModel();
-                    upComingEvent.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                    upComingEvent.setId(cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
                     upComingEvent.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
                     upComingEvent.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
                     upComingEvent.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
@@ -137,7 +213,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 if (cursor.moveToFirst()) {
                     do {
                         EventModel event = new EventModel();
-                        event.setId(cursor.getInt(cursor.getColumnIndex(ID)));
+                        event.setId(cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
                         event.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
                         event.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
                         event.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
@@ -197,7 +273,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cv.put(STATUS, status);
         //? is for formatting purposes
         //convert ID to a string for db match on ID note: that ID was denoted as a String
-        db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
     //method for updating event
@@ -205,30 +281,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         //cv.put takes in the column to update and the new value
         cv.put(EVENT, event);
-        db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void updateStartTime(int id, String startTime) {
         ContentValues cv = new ContentValues();
         cv.put(START_TIME, startTime);
-        db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void updateDate(int id, String endTime) {
         ContentValues cv = new ContentValues();
         cv.put(DATE, endTime);
-        db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
     public void updateLocation(int id, String location) {
         ContentValues cv = new ContentValues();
         cv.put(LOCATION, location);
-        db.update(EVENT_TABLE, cv, ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
     //method for deleting event
     public void deleteEvent(int id) {
-        db.delete(EVENT_TABLE, ID + "=?", new String[] {String.valueOf(id)});
+        db.delete(EVENT_TABLE, EVENT_ID + "=?", new String[] {String.valueOf(id)});
     }
 
 

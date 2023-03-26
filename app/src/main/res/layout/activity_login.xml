@@ -41,75 +41,66 @@
         android:textColor="@color/white"
         android:textSize="32sp"/>
 
-    <TextView
-        android:id="@+id/profile_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Glad to see you!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="32sp"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/loginZidBtn"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/loginZidLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="290dp"
         android:layout_height="56dp"
         android:layout_marginTop="40dp"
-        android:background="@drawable/button_with_outline"
         android:elevation="4dp"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        android:textColorHint="@color/white"
+        app:boxStrokeWidth="1dp"
+        app:boxBackgroundColor="#0DBF81FF"
+        app:boxStrokeColor="#99BF81FF"
+        app:hintTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_name">
 
-    <EditText
-        android:id="@+id/loginZidEt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:background="@android:color/transparent"
-        android:hint="Enter zid (z123456)"
-        android:inputType="textPassword"
-        android:textAllCaps="false"
-        android:textColorHint="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/loginZidBtn"
-        app:layout_constraintStart_toStartOf="@+id/loginZidBtn"
-        app:layout_constraintTop_toTopOf="@+id/loginZidBtn" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginZidEt"
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Enter zid (z123456)"
+            android:textColor="@color/white" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/loginPasswordBtn"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/loginPasswordLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="290dp"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/button_with_outline"
         android:elevation="4dp"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        android:textColorHint="@color/white"
+        app:boxStrokeWidth="1dp"
+        app:boxBackgroundColor="#0DBF81FF"
+        app:boxStrokeColor="#99BF81FF"
+        app:hintTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginZidBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/loginZidLayout">
 
-    <EditText
-        android:id="@+id/loginPasswordEt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:background="@android:color/transparent"
-        android:hint="Enter zid password"
-        android:inputType="textPassword"
-        android:textAllCaps="false"
-        android:textColorHint="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/loginPasswordBtn"
-        app:layout_constraintStart_toStartOf="@+id/loginPasswordBtn"
-        app:layout_constraintTop_toTopOf="@+id/loginPasswordBtn" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginPasswordEt"
+            android:textCursorDrawable="@null"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter zid password"
+            android:textColor="@color/white" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <!--TODO fix format of checkbox-->
     <CheckBox
@@ -123,8 +114,8 @@
         android:text="Check box if you are staff"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/loginPasswordBtn"
-        app:layout_constraintTop_toBottomOf="@+id/loginPasswordBtn" />
+        app:layout_constraintStart_toStartOf="@+id/loginPasswordLayout"
+        app:layout_constraintTop_toBottomOf="@+id/loginPasswordLayout" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/loginBtn"
@@ -138,7 +129,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPasswordBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/loginPasswordLayout" />
 
     <TextView
         android:id="@+id/textView3"

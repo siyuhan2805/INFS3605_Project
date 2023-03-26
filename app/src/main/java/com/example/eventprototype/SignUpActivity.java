@@ -2,7 +2,10 @@ package com.example.eventprototype;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -10,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.eventprototype.Db.DatabaseHandler;
+import com.example.eventprototype.Model.UserModel;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Random;
 
@@ -19,55 +24,116 @@ public class SignUpActivity extends AppCompatActivity {
     private int int_random = rand.nextInt(upperbound);
     private AppCompatButton btnSignUp;
     private AppCompatButton btnLogin;
-    private DatabaseHandler database = new DatabaseHandler(this);
-    //TODO: fix later
-    private boolean isStaff = false;
-    private EditText signUpPasswordEt;
-    private EditText signUpZidEt;
+    private DatabaseHandler db;
+    private SignUpActivity activity;
+    private TextInputEditText signUpPasswordEt;
+    private TextInputEditText signUpZidEt;
+    private CheckBox staffCheckBox;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        staffCheckBox = findViewById(R.id.staffCheckBox);
         btnSignUp = findViewById(R.id.signUpBtn);
-        btnLogin = findViewById(R.id.signLoginBtn);
+        btnLogin = findViewById(R.id.loginSignupBtn);
         signUpPasswordEt = findViewById(R.id.signUpPasswordEt);
         signUpZidEt = findViewById(R.id.signUpZidEt);
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v){
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-            }
-        });
+        //open database
+        db = new DatabaseHandler(this);
+        db.openDatabase();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick (View v){
                 startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
 
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    createNewUser();
+                    Toast.makeText(SignUpActivity.this, "New User Created", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+
+                }
+                catch (Exception e) {
+                    Toast.makeText(SignUpActivity.this, "Error with registration", Toast.LENGTH_SHORT).show();
+                    System.out.println(e.getMessage());
+                }
+
+            }
+        });
+
+        signUpZidEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        signUpPasswordEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+    }
+
+
+    //function to check whether the fields are zID are 8 characters long and start with a z
+    public void checkRequiredFields() {
+        if (!signUpPasswordEt.getText().toString().isEmpty() && !signUpZidEt.getText().toString().isEmpty()) {
+            //Todo: add in checks for password length and checks for zId length and integrity
+            btnSignUp.setEnabled(true);
+        }
+        else {
+            btnSignUp.setEnabled(false);
+        }
     }
     public void createNewUser() {
-        try {
-            String zId = signUpZidEt.getText().toString();
-            String password = signUpPasswordEt.getText().toString();
-
-            //TODO: fix up so it takes requirements into account
-            // If the username and password are correct move to the home page
-            // Otherwise display text "Incorrect username or password"
-            if(true) {
-                database.insertUsers(int_random, zId, password, 0);
-                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-            } else {
-                Toast.makeText(SignUpActivity.this,
-                        "Error",
-                        Toast.LENGTH_SHORT).show();
-            }
-        } catch(Exception e) {
-            Toast.makeText(SignUpActivity.this, "Error"
-                    + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        //get the user signup information from the EditText fields
+        String username = signUpZidEt.getText().toString();
+        String password = signUpPasswordEt.getText().toString();
+        int isStaff;
+        //check if staff checkbox is checked or not
+        if (staffCheckBox.isChecked()) {
+            isStaff = 1;
         }
+        else {
+            isStaff = 0;
+        }
+        //initialise the User object
+        UserModel user = new UserModel();
+        //setting the setters of the User model
+        user.setIsStaff(isStaff);
+        user.setUsername(username);
+        user.setPassword(password);
+        db.insertUser(user);
     }
 }
