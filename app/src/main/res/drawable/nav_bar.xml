@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- rectangle_20_ek5 from your XD file. -->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:shape="rectangle">
+    <solid android:color="#302F3D"/>
+    <corners android:radius="30dp" />
+<!--    <gradient-->
+<!--        android:startColor="#cc2b5e"-->
+<!--        android:endColor="#753a88"-->
+<!--        android:type="linear"-->
+<!--        android:angle="45"/>-->
+</shape>

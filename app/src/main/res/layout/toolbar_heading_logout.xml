@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#99BF81FF">
+    android:background="#302F3D">
 
     <RelativeLayout
         android:layout_width="match_parent"

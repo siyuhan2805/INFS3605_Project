@@ -1,5 +1,6 @@
 package com.example.eventprototype;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,7 @@ import com.example.eventprototype.Db.DatabaseHandler;
 import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -39,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private List<UserModel> userList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
-
 
 
     @Override

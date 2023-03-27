@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     android:background="#282B33">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_heading_only"
+        tools:layout_editor_absoluteX="-138dp"
+        tools:layout_editor_absoluteY="38dp" />
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
