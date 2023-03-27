@@ -13,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.eventprototype.Db.DatabaseHandler;
+import com.example.eventprototype.Model.EngagementModel;
+import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.List;
 import java.util.Random;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -57,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     createNewUser();
+                    createEngagements();
                     Toast.makeText(SignUpActivity.this, "New User Created", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
 
@@ -135,5 +139,25 @@ public class SignUpActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setPassword(password);
         db.insertUser(user);
+    }
+
+    //method to ensure new users have the same engagements as existing users
+    public void createEngagements() {
+        //get listing of all users
+        List<UserModel> userList = db.getAllUsers();
+        //targets the recently added user to the userList
+        int recentUser = userList.size() - 1;
+        EngagementModel engagementModel = new EngagementModel();
+        //get list of all events
+        List<EventModel> eventList = db.getAllEvents();
+        //loop over all the events, creating a new engagement for each event in the system
+        for (EventModel i : eventList) {
+            engagementModel.setEventId(i.getId());
+            engagementModel.setUserId(userList.get(recentUser).getId());
+            //default is not joined
+            engagementModel.setIsJoin(0);
+            db.insertEngagement(engagementModel);
+        }
+
     }
 }

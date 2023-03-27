@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.eventprototype.Adapter.EventAdapter;
 import com.example.eventprototype.Adapter.UpcomingEventsAdapter;
@@ -19,6 +20,7 @@ import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private EventAdapter adapter;
     private UpcomingEventsAdapter upcomingEventsAdapter;
     private List<EventModel> eventList, upEventList;
-    private ArrayList<UserModel> userList;
+    private List<UserModel> userList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
 
@@ -47,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         getSupportActionBar().hide();
 
         //get the intent passed from the LoginActivity
-        userList = getIntent().getParcelableExtra("userList");
+        userList = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
+        Toast.makeText(MainActivity.this, "User logged in: " + userList.get(0).getUsername(), Toast.LENGTH_SHORT).show();
         //initialise fab
         fab = findViewById(R.id.fab);
         //initialise db

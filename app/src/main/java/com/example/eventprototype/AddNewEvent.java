@@ -28,7 +28,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.eventprototype.Db.DatabaseHandler;
+import com.example.eventprototype.Model.EngagementModel;
 import com.example.eventprototype.Model.EventModel;
+import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.FileNotFoundException;
@@ -37,6 +39,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AddNewEvent extends DialogFragment {
@@ -221,10 +224,18 @@ public class AddNewEvent extends DialogFragment {
                 event.setEventCoverImage(imageToStore);
                 //insert the created Event into the database
                 db.insertEvent(event);
+                //method that populates the engagement table for all users after a new event is created
+                createEngagements();
                 dismiss();
+
+
+
             }
 
         });
+
+        //want to insert after the event is added to the eventList table
+
 
         eventCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,28 +286,6 @@ public class AddNewEvent extends DialogFragment {
                 timePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));
             }
         });
-
-        /* blocked out until update function is implemented
-        final boolean finalIsUpdate = isUpdate;
-        newEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //check if we are trying to update an already existing event or create a new event
-                String text = newEventText.getText().toString();
-                if (finalIsUpdate) {
-                    db.updateEvent(bundle.getInt("id"), text);
-                }
-                else {
-                    EventModel event = new EventModel();
-                    event.setEvent(text);
-                    event.setStatus(0);
-                    db.insertEvent(event);
-                }
-                dismiss();
-            }
-        });
-
-         */
 
         //on button click listener for when eventImageBtn is pressed
         eventImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -363,22 +352,29 @@ public class AddNewEvent extends DialogFragment {
         return newDate;
     }
 
-    /*
-    public void storeImage(View view) {
-        try {
-            if (eventCoverPhoto.getDrawable() != null && imageToStore != null) {
-                db.storeImage(new EventModel());
-            }
-            else {
-                System.out.println("No image selected");
-            }
+    public void createEngagements() {
+        //we want to trace down the event that was just inserted
+        List<EventModel> eventList = db.getAllEvents();
+        //to get the most recently added Event object, we get the length of the list minus 1
+        int listLength = eventList.size() - 1;
+        //create instance of Engagement object
+        EngagementModel newEngagement = new EngagementModel();
+        //get all the users
+        List<UserModel> userList = db.getAllUsers();
+        //loop over all users in the system and add new Engagements for all users, upon a new event creation
+        for (UserModel i : userList) {
+            //accessing the recently inserted event's getters and setting the id information into Engagement setter
+            newEngagement.setEventId(eventList.get(listLength).getId());
+            //default is not joined activity
+            newEngagement.setIsJoin(0);
+            //accessing the user's id and setting it to the setter method
+            newEngagement.setUserId(i.getId());
+            //call method from DatabaseHandler to insert into Engagement table
+            db.insertEngagement(newEngagement);
         }
 
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
-    */
+
 
     //this method is to ensure after updating the db, the RecyclerView is immediately updated
     @Override

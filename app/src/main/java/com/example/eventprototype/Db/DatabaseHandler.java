@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.metrics.Event;
 import android.widget.Toast;
 
+import com.example.eventprototype.Model.EngagementModel;
 import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
 
@@ -121,6 +122,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(USER_TABLE, null, cv);
     }
 
+    public void insertEngagement(EngagementModel engagement) {
+        ContentValues cv = new ContentValues();
+        //no ID needed as it is already auto-incremented
+        cv.put(ISJOIN, engagement.getIsJoin());
+        cv.put(USER_ID, engagement.getUserId());
+        cv.put(EVENT_ID, engagement.getEventId());
+        //inserrt the above info into the ENGAGEMENT table
+        db.insert(ENGAGEMENT_TABLE, null, cv);
+    }
+
     public void insertEvent(EventModel event) {
         //ContentValues is a key/value store that inserts data into a row of a table
         ContentValues cv = new ContentValues();
@@ -195,6 +206,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
         }
         return upEventList;
+    }
+
+    //get all users from the db to cycle and add an "Engagement" for
+    @SuppressLint("Range")
+    public List<UserModel> getAllUsers() {
+        List<UserModel> userList = new ArrayList<>();
+        Cursor cursor = db.query(USER_TABLE, null, null, null, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    UserModel user = new UserModel();
+                    user.setId(cursor.getInt(cursor.getColumnIndex(USER_ID)));
+                    user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
+                    user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
+                    user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    //adds user object to the userList
+                    userList.add(user);
+                }while (cursor.moveToNext());
+            }
+        }
+        return userList;
+
     }
 
     //get all events from the db and store it in our List eventList

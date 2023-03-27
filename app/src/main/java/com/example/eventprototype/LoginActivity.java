@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Username & password incorrect", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    System.out.println(userList.get(0).getUsername());
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class );
                     intent.putExtra("currentUser", userList);
                     startActivity(intent);
