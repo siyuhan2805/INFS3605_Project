@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class DashboardActivity extends AppCompatActivity {
     private NavigationBarView navigationView;
     private TextView menuTitle;
+    private ImageView logoutBtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -24,6 +27,15 @@ public class DashboardActivity extends AppCompatActivity {
         //set up the toolbar
         menuTitle = findViewById(R.id.toolbar_heading_logout);
         menuTitle.setText("Dashboard");
+        logoutBtn = findViewById(R.id.logoutIcon);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DashboardActivity.this,
+                        LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //Set up nav bar
         navigationView = findViewById(R.id.navView);
@@ -36,6 +48,8 @@ public class DashboardActivity extends AppCompatActivity {
                     case R.id.nav_profile:
                         intent = new Intent(DashboardActivity.this,
                                 ProfileActivity.class);
+                        //TODO: intent of user needs to be passed to each scene
+                        //intent.putExtra("currentUser", userList);
                         startActivity(intent);
                         break;
                     case R.id.nav_add_event:
