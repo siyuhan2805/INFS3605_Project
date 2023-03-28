@@ -11,12 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.ArrayList;
 
 public class DashboardActivity extends AppCompatActivity {
     private NavigationBarView navigationView;
     private TextView menuTitle;
     private ImageView logoutBtn;
+    private ArrayList<UserModel> userList;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -48,22 +53,26 @@ public class DashboardActivity extends AppCompatActivity {
                     case R.id.nav_profile:
                         intent = new Intent(DashboardActivity.this,
                                 ProfileActivity.class);
-                        //TODO: intent of user needs to be passed to each scene
-                        //intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", userList);
                         startActivity(intent);
                         break;
                     case R.id.nav_add_event:
                         intent = new Intent(DashboardActivity.this,
                                 AddNewEvent.class);
+                        intent.putExtra("currentUser", userList);
                         startActivity(intent);
                         break;
                     case R.id.nav_home:
                         intent = new Intent(DashboardActivity.this,
                                 DashboardActivity.class);
+                        intent.putExtra("currentUser", userList);
                         startActivity(intent);
                         break;
                     case R.id.nav_feed:
-                        //TODO: make social media feed
+                        intent = new Intent(DashboardActivity.this,
+                                MainActivity.class);
+                        intent.putExtra("currentUser", userList);
+                        startActivity(intent);
                         break;
                     case R.id.nav_data:
                         //TODO: make nav data page

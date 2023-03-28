@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eventprototype.Adapter.EventAdapter;
@@ -40,11 +43,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private EventAdapter adapter;
     private UpcomingEventsAdapter upcomingEventsAdapter;
     private List<EventModel> eventList, upEventList;
-    private List<UserModel> userList;
+    private ArrayList<UserModel> userList;
     private DatabaseHandler db;
     private FloatingActionButton fab;
+    private TextView menuTitle;
+    private ImageView backBtn;
 
-
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +65,19 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         db = new DatabaseHandler(this);
         //open database
         db.openDatabase();
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_backspace);
+        menuTitle.setText("Events");
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, DashboardActivity.class);
+                intent.putExtra("currentUser", userList);
+                startActivity(intent);
+            }
+        });
 
 
         //initialise ItemTouchHelper

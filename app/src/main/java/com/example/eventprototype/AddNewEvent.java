@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -57,6 +58,8 @@ public class AddNewEvent extends DialogFragment {
     private Uri imageFilePath;
     private Bitmap imageToStore;
     private static final int PICK_IMAGE_REQUEST = 100;
+    private ImageView backBtn;
+    private TextView menuTitle;
 
 
     //used to return object of AddNewEvent class so MainActivity can call the methods
@@ -69,7 +72,6 @@ public class AddNewEvent extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, R.style.DialogStyle);
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +95,22 @@ public class AddNewEvent extends DialogFragment {
         eventSaveBtn = getView().findViewById(R.id.eventSaveBtn);
         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
+
+        //set up the toolbar
+        menuTitle = getView().findViewById(R.id.toolbar_heading_backspace);
+        menuTitle.setText("New Event");
+        backBtn = getView().findViewById(R.id.backBtn);
+        /*
+        TODO: fix the style of this class, not sure that a fragment will work
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddNewEvent.this, DashboardActivity.class);
+                //TODO: pass intent of user back here
+                startActivity(intent);
+            }
+        });
+         */
 
         //pass the activity to the DatabaseHandler
         db = new DatabaseHandler(getActivity());
