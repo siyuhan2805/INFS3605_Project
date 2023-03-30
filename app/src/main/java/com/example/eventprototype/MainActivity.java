@@ -66,6 +66,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         //open database
         db.openDatabase();
 
+/* azureDb
+        DatabaseHelper databaseHelper = new DatabaseHelper();
+        databaseHelper.connect();
+*/
+
+
+
         //set up the toolbar
         menuTitle = findViewById(R.id.toolbar_heading_backspace);
         menuTitle.setText("Events");

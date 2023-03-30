@@ -50,6 +50,12 @@ public class SignUpActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
         db.openDatabase();
 
+/* azuredb connecy
+        DatabaseHelper databaseHelper = new DatabaseHelper();
+        databaseHelper.connect();
+*/
+
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){

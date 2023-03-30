@@ -116,6 +116,11 @@ public class AddNewEvent extends DialogFragment {
         db = new DatabaseHandler(getActivity());
         db.openDatabase();
 
+        /* azureDb
+        DatabaseHelper databaseHelper = new DatabaseHelper();
+        databaseHelper.connect();
+*/
+
         /* blocking out this code until the add event is completed
         //checks if we are updating event or creating a new event
         //this would execute different queries in the db
