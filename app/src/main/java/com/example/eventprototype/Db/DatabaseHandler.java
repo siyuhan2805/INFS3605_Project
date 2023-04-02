@@ -201,7 +201,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     //adds event object to the eventList
                     upEventList.add(upComingEvent);
 
-
                 } while (cursor.moveToNext());
             }
         }
@@ -270,6 +269,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return eventList;
     }
 
+    @SuppressLint("Range")
+    public List<EventModel> getAllUserEvents(int userId) {
+        List<EventModel> userEventList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT" + " eventList.eventId, "
+                + "eventList.event, "
+                + "eventList.status, "
+                + "eventList.eventDate, "
+                + "eventList.image, "
+                + "eventList.eventStartTime, "
+                + "eventList.eventLocation, "
+                + "engagement.isJoin "
+                + "FROM " + EVENT_TABLE + " JOIN " + ENGAGEMENT_TABLE + " ON " + "eventList.eventId = " + "engagement.eventId"
+                + " WHERE " + "engagement.userId = ?", new String[]{String.valueOf(userId)});
+        //will ensure the database doesn't get corrupted should we read/write data and accidentally close app
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        EventModel userEvent = new EventModel();
+                        userEvent.setId(cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
+                        userEvent.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
+                        userEvent.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
+                        userEvent.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+                        userEvent.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
+                        userEvent.setStatus(cursor.getInt(cursor.getColumnIndex(STATUS)));
+                        //convert the stored db images into Bitmap as they are stored as bytes
+                        byte [] dbBytesImage = cursor.getBlob(cursor.getColumnIndex(IMAGE));
+                        Bitmap objectBitmap = BitmapFactory.decodeByteArray(dbBytesImage, 0, dbBytesImage.length);
+                        //setting the getters/setters
+                        userEvent.setEventCoverImage(objectBitmap);
+                        //adds event object to the eventList
+                        userEvent.setIsJoin(cursor.getInt(cursor.getColumnIndex(ISJOIN)));
+                        userEventList.add(userEvent);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return userEventList;
+    }
+
+
     /*
     public void storeImage(EventModel eventModel) {
         try {
@@ -298,6 +346,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
      */
 
+    public void updateEngagement(int userId, int eventId, int isJoin) {
+        ContentValues cv = new ContentValues();
+        cv.put(ISJOIN, isJoin);
+        //? is for formatting purposes
+        //convert ID to a string for db match on ID note: that ID was denoted as a String
+        db.update(ENGAGEMENT_TABLE, cv, EVENT_ID + "=? AND " + USER_ID + "=?", new String[] {String.valueOf(eventId), String.valueOf(userId)});
+    }
 
 
     //method for updating status

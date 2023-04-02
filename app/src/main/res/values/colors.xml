@@ -10,6 +10,7 @@
     <color name="darkBackground">#282B33</color>
     <color name="themeSecondaryColor">#bf81ff</color>
     <color name="mtrl_textinput_default_box_stroke_color">#99BF81FF</color>
+    <color name="joinColor">#A259FF</color>
 
 
 </resources>

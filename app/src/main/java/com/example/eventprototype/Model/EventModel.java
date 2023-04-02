@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 public class EventModel {
     private int id, status;
     //"event" is the name of the event in SQLITE
+    private int isJoin;
+    private int userId;
     private String event;
     private String location;
     private String startTime;
@@ -66,5 +68,13 @@ public class EventModel {
 
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public int getIsJoin() {
+        return isJoin;
+    }
+
+    public void setIsJoin(int isJoin) {
+        this.isJoin = isJoin;
     }
 }

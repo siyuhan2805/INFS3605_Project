@@ -36,11 +36,9 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private EventAdapter adapter;
     private UpcomingEventsAdapter upcomingEventsAdapter;
     private List<EventModel> eventList, upEventList;
-    private List<UserModel> userList;
+    private List<UserModel> currentUser;
     private DatabaseHandler db;
     private FloatingActionButton fab;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         getSupportActionBar().hide();
 
         //get the intent passed from the LoginActivity
-        userList = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
-        Toast.makeText(MainActivity.this, "User logged in: " + userList.get(0).getUsername(), Toast.LENGTH_SHORT).show();
+        currentUser = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
+        Toast.makeText(MainActivity.this, "User logged in: " + currentUser.get(0).getUsername(), Toast.LENGTH_SHORT).show();
         //initialise fab
         fab = findViewById(R.id.fab);
         //initialise db
@@ -79,8 +77,13 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         adapter = new EventAdapter(db, this);
         eventsRecyclerView.setAdapter(adapter);
 
-        eventList = db.getAllEvents();
+
+        eventList = db.getAllUserEvents(currentUser.get(0).getId());
+        System.out.println(eventList.get(0).getIsJoin());
+        //print out the name of the position
+        System.out.println(eventList.get(0).getEvent());
         Collections.reverse(eventList);
+        adapter.setCurrentUser(currentUser);
         adapter.setEvents(eventList);
 
         //populating the List with events that are due to happen in the next 7 days
@@ -108,15 +111,17 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         Collections.reverse(upEventList);
         upcomingEventsAdapter.setUpComingEvents(upEventList);
         upcomingEventsAdapter.notifyDataSetChanged();
-
     }
 
+
+    //method to get today's date
     public String todayDate() {
         String todayDate = new SimpleDateFormat("yyyy/MM/dd", Locale.US).format(new Date());
         System.out.println(todayDate);
         return todayDate;
     }
 
+    //get the date 3 days in the future
     public String threeDayDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
         Calendar cDate = Calendar.getInstance();

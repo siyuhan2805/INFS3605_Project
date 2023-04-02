@@ -375,7 +375,6 @@ public class AddNewEvent extends DialogFragment {
 
     }
 
-
     //this method is to ensure after updating the db, the RecyclerView is immediately updated
     @Override
     public void onDismiss(DialogInterface dialog) {
