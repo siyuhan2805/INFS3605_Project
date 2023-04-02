@@ -51,10 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
         db.openDatabase();
 
-/* azureDb
-        DatabaseHelper databaseHelper = new DatabaseHelper();
-        databaseHelper.connect();
-*/
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){
