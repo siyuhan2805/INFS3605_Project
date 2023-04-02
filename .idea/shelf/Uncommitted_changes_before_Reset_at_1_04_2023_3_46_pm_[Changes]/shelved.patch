@@ -1,0 +1,323 @@
+Index: app/src/main/res/layout/activity_dashboard.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:card_view=\"http://schemas.android.com/apk/res-auto\"\r\n    android:background=\"#282B33\">\r\n\r\n    <include\r\n        android:id=\"@+id/include\"\r\n        layout=\"@layout/toolbar_heading_logout\"\r\n        tools:layout_editor_absoluteX=\"-138dp\"\r\n        tools:layout_editor_absoluteY=\"38dp\" />\r\n\r\n    <com.google.android.material.bottomnavigation.BottomNavigationView\r\n        android:id=\"@+id/navView\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"75dp\"\r\n        android:layout_marginStart=\"16dp\"\r\n        android:layout_marginEnd=\"16dp\"\r\n        android:layout_marginBottom=\"24dp\"\r\n        android:background=\"@drawable/nav_bar\"\r\n        app:itemIconTint=\"@color/white\"\r\n        app:itemTextColor=\"@color/white\"\r\n        app:menu=\"@menu/navigation_menu\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"/>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_dashboard.xml b/app/src/main/res/layout/activity_dashboard.xml
+--- a/app/src/main/res/layout/activity_dashboard.xml	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/app/src/main/res/layout/activity_dashboard.xml	(date 1680320661110)
+@@ -10,7 +10,7 @@
+     <include
+         android:id="@+id/include"
+         layout="@layout/toolbar_heading_logout"
+-        tools:layout_editor_absoluteX="-138dp"
++        tools:layout_editor_absoluteX="100dp"
+         tools:layout_editor_absoluteY="38dp" />
+ 
+     <com.google.android.material.bottomnavigation.BottomNavigationView
+@@ -28,4 +28,17 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"/>
+ 
++    <WebView
++        android:id="@+id/dashboardView"
++        android:layout_width="300dp"
++        android:layout_height="400dp"
++        android:layout_marginStart="16dp"
++        android:layout_marginTop="8dp"
++        android:layout_marginEnd="16dp"
++        android:layout_marginBottom="8dp"
++        app:layout_constraintBottom_toTopOf="@+id/navView"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/include" />
++
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/eventprototype/DashboardActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.eventprototype;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.eventprototype.Model.UserModel;\r\nimport com.google.android.material.navigation.NavigationBarView;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class DashboardActivity extends AppCompatActivity {\r\n    private NavigationBarView navigationView;\r\n    private TextView menuTitle;\r\n    private ImageView logoutBtn;\r\n    private ArrayList<UserModel> userList;\r\n\r\n\r\n    @SuppressLint(\"MissingInflatedId\")\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_dashboard);\r\n\r\n        //set up the toolbar\r\n        menuTitle = findViewById(R.id.toolbar_heading_logout);\r\n        menuTitle.setText(\"Dashboard\");\r\n        logoutBtn = findViewById(R.id.logoutIcon);\r\n        logoutBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(DashboardActivity.this,\r\n                        LoginActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n        //Set up nav bar\r\n        navigationView = findViewById(R.id.navView);\r\n\r\n        navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {\r\n            @Override\r\n            public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n                Intent intent = new Intent();\r\n                switch (item.getItemId()) {\r\n                    case R.id.nav_profile:\r\n                        intent = new Intent(DashboardActivity.this,\r\n                                ProfileActivity.class);\r\n                        intent.putExtra(\"currentUser\", userList);\r\n                        startActivity(intent);\r\n                        break;\r\n                    case R.id.nav_add_event:\r\n                        intent = new Intent(DashboardActivity.this,\r\n                                AddNewEvent.class);\r\n                        intent.putExtra(\"currentUser\", userList);\r\n                        startActivity(intent);\r\n                        break;\r\n                    case R.id.nav_home:\r\n                        intent = new Intent(DashboardActivity.this,\r\n                                DashboardActivity.class);\r\n                        intent.putExtra(\"currentUser\", userList);\r\n                        startActivity(intent);\r\n                        break;\r\n                    case R.id.nav_feed:\r\n                        intent = new Intent(DashboardActivity.this,\r\n                                MainActivity.class);\r\n                        intent.putExtra(\"currentUser\", userList);\r\n                        startActivity(intent);\r\n                        break;\r\n                    case R.id.nav_data:\r\n                        //TODO: make nav data page\r\n                        break;\r\n                }\r\n                return true;\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/eventprototype/DashboardActivity.java b/app/src/main/java/com/example/eventprototype/DashboardActivity.java
+--- a/app/src/main/java/com/example/eventprototype/DashboardActivity.java	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/app/src/main/java/com/example/eventprototype/DashboardActivity.java	(date 1680321357149)
+@@ -5,6 +5,7 @@
+ import android.os.Bundle;
+ import android.view.MenuItem;
+ import android.view.View;
++import android.webkit.WebView;
+ import android.widget.ImageView;
+ import android.widget.TextView;
+ 
+@@ -21,6 +22,8 @@
+     private TextView menuTitle;
+     private ImageView logoutBtn;
+     private ArrayList<UserModel> userList;
++    private WebView dashboardView;
++    private String dashboardLink;
+ 
+ 
+     @SuppressLint("MissingInflatedId")
+@@ -29,6 +32,11 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_dashboard);
+ 
++        //set up dashboard
++        dashboardView = findViewById(R.id.dashboardView);
++        dashboardLink = "https://community.powerbi.com/t5/Data-Stories-Gallery/Attendance-Tracker-Improving-School-Attendance-by-Decisive-Data/td-p/136078";
++        dashboardView.loadUrl(dashboardLink);
++
+         //set up the toolbar
+         menuTitle = findViewById(R.id.toolbar_heading_logout);
+         menuTitle.setText("Dashboard");
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\r\n        android:fullBackupContent=\"@xml/backup_rules\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.EventPrototype\"\r\n        tools:targetApi=\"31\">\r\n        <activity\r\n            android:name=\".AzureDb\"\r\n            android:exported=\"false\"\r\n            android:label=\"@string/title_activity_azure_db\"\r\n            android:theme=\"@style/Theme.EventPrototype.NoActionBar\">\r\n            <meta-data\r\n                android:name=\"android.app.lib_name\"\r\n                android:value=\"\" />\r\n        </activity>\r\n        <activity\r\n            android:name=\".SplashActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\"\r\n            android:windowSoftInputMode=\"adjustPan\"></activity>\r\n        <activity\r\n            android:name=\".StartActivity\"\r\n            android:exported=\"true\"\r\n            android:windowSoftInputMode=\"adjustPan\"></activity>\r\n        <activity\r\n            android:name=\".SignUpActivity\"\r\n            android:exported=\"true\"\r\n            android:windowSoftInputMode=\"adjustPan\"></activity>\r\n        <activity\r\n            android:name=\".LoginActivity\"\r\n            android:exported=\"true\"\r\n            android:windowSoftInputMode=\"adjustPan\"></activity>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/app/src/main/AndroidManifest.xml	(date 1680321357140)
+@@ -13,23 +13,18 @@
+         android:supportsRtl="true"
+         android:theme="@style/Theme.EventPrototype"
+         tools:targetApi="31">
+-        <activity
+-            android:name=".AzureDb"
+-            android:exported="false"
+-            android:label="@string/title_activity_azure_db"
+-            android:theme="@style/Theme.EventPrototype.NoActionBar">
+-            <meta-data
+-                android:name="android.app.lib_name"
+-                android:value="" />
+-        </activity>
++<!--        <activity-->
++<!--            android:name=".AzureDb"-->
++<!--            android:exported="false"-->
++<!--            android:label="@string/title_activity_azure_db"-->
++<!--            android:theme="@style/Theme.EventPrototype.NoActionBar">-->
++<!--            <meta-data-->
++<!--                android:name="android.app.lib_name"-->
++<!--                android:value="" />-->
++<!--        </activity>-->
+         <activity
+             android:name=".SplashActivity"
+             android:exported="true">
+-            <intent-filter>
+-                <action android:name="android.intent.action.MAIN" />
+-
+-                <category android:name="android.intent.category.LAUNCHER" />
+-            </intent-filter>
+         </activity>
+         <activity
+             android:name=".MainActivity"
+@@ -47,6 +42,15 @@
+             android:name=".LoginActivity"
+             android:exported="true"
+             android:windowSoftInputMode="adjustPan"></activity>
++        <activity
++            android:name=".DashboardActivity"
++            android:exported="true">
++            <intent-filter>
++                <action android:name="android.intent.action.MAIN" />
++
++                <category android:name="android.intent.category.LAUNCHER" />
++            </intent-filter>
++        </activity>
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    id 'com.android.application'\r\n}\r\n\r\nandroid {\r\n    namespace 'com.example.eventprototype'\r\n    compileSdk 33\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.eventprototype\"\r\n        minSdk 30\r\n        targetSdk 33\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation 'androidx.appcompat:appcompat:1.6.1'\r\n    implementation 'com.google.android.material:material:1.8.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'\r\n    implementation 'androidx.navigation:navigation-fragment:2.4.1'\r\n    implementation 'androidx.navigation:navigation-ui:2.4.1'\r\n    testImplementation 'junit:junit:4.13.2'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.5'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'\r\n    implementation 'com.microsoft.azure:azure-sqldb-spark:1.0.2'\r\n    implementation 'com.microsoft.azure:azure-sqldb-connection-string:1.0.0'\r\n    implementation 'com.microsoft.sqlserver:mssql-jdbc:9.4.0.jre11'\r\n    implementation files('libs/sqljdbc.jar')\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/app/build.gradle	(date 1680321967989)
+@@ -41,8 +41,6 @@
+     testImplementation 'junit:junit:4.13.2'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+-    implementation 'com.microsoft.azure:azure-sqldb-spark:1.0.2'
+-    implementation 'com.microsoft.azure:azure-sqldb-connection-string:1.0.0'
+     implementation 'com.microsoft.sqlserver:mssql-jdbc:9.4.0.jre11'
+     implementation files('libs/sqljdbc.jar')
+ 
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nplugins {\r\n    id 'com.android.application' version '7.3.1' apply false\r\n    id 'com.android.library' version '7.3.1' apply false\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/build.gradle	(date 1680323149740)
+@@ -1,5 +1,5 @@
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ plugins {
+-    id 'com.android.application' version '7.3.1' apply false
+-    id 'com.android.library' version '7.3.1' apply false
++    id 'com.android.application' version '7.4.2' apply false
++    id 'com.android.library' version '7.4.2' apply false
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/eventprototype/AddNewEvent.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.eventprototype;\r\n\r\nimport static android.app.Activity.RESULT_OK;\r\n\r\nimport android.app.Activity;\r\nimport android.app.DatePickerDialog;\r\nimport android.app.TimePickerDialog;\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.media.Image;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.text.Editable;\r\nimport android.text.TextWatcher;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.DatePicker;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.TimePicker;\r\n\r\nimport androidx.activity.result.contract.ActivityResultContracts;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.DialogFragment;\r\n\r\nimport com.example.eventprototype.Db.DatabaseHandler;\r\nimport com.example.eventprototype.Model.EngagementModel;\r\nimport com.example.eventprototype.Model.EventModel;\r\nimport com.example.eventprototype.Model.UserModel;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\n\r\nimport java.io.FileNotFoundException;\r\nimport java.io.IOException;\r\nimport java.text.ParseException;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.Calendar;\r\nimport java.util.Date;\r\nimport java.util.List;\r\nimport java.util.Locale;\r\n\r\npublic class AddNewEvent extends DialogFragment {\r\n\r\n    public static final String TAG = \"ActionBottomDialog\";\r\n\r\n    private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation;\r\n    private Button eventSaveBtn, eventImageBtn;\r\n    private ImageView eventCoverPhoto;\r\n    private ImageView eventCancelBtn;\r\n    private DatabaseHandler db;\r\n    private final Calendar myCalendar = Calendar.getInstance();\r\n    private int hour;\r\n    private int min;\r\n    private Uri imageFilePath;\r\n    private Bitmap imageToStore;\r\n    private static final int PICK_IMAGE_REQUEST = 100;\r\n    private ImageView backBtn;\r\n    private TextView menuTitle;\r\n\r\n\r\n    //used to return object of AddNewEvent class so MainActivity can call the methods\r\n    public static AddNewEvent newInstance() {\r\n        return new AddNewEvent();\r\n    }\r\n\r\n    //savedInstanceState checks if this fragment exists in the memory\r\n    @Override\r\n    public void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setStyle(STYLE_NORMAL, R.style.DialogStyle);\r\n    }\r\n\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.new_event, container, false);\r\n        //re-adjust the keyboard when typing\r\n        //getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);\r\n        return view;\r\n    }\r\n\r\n    @Override\r\n    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {\r\n        super.onViewCreated(view, savedInstanceState);\r\n        //getView is used as it is a fragment\r\n        //setting the xml components\r\n\r\n        eventCoverPhoto = getView().findViewById(R.id.eventCoverPhoto);\r\n        eventTitle = getView().findViewById(R.id.eventTitle);\r\n        eventStartTime = getView().findViewById(R.id.eventStartTime);\r\n        eventDate = getView().findViewById(R.id.eventDate);\r\n        eventLocation = getView().findViewById(R.id.eventLocation);\r\n        eventSaveBtn = getView().findViewById(R.id.eventSaveBtn);\r\n        eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);\r\n        eventImageBtn = getView().findViewById(R.id.eventImageBtn);\r\n\r\n        //set up the toolbar\r\n        menuTitle = getView().findViewById(R.id.toolbar_heading_backspace);\r\n        menuTitle.setText(\"New Event\");\r\n        backBtn = getView().findViewById(R.id.backBtn);\r\n        /*\r\n        TODO: fix the style of this class, not sure that a fragment will work\r\n        backBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(AddNewEvent.this, DashboardActivity.class);\r\n                //TODO: pass intent of user back here\r\n                startActivity(intent);\r\n            }\r\n        });\r\n         */\r\n\r\n        //pass the activity to the DatabaseHandler\r\n        db = new DatabaseHandler(getActivity());\r\n        db.openDatabase();\r\n\r\n        /* azureDb\r\n        DatabaseHelper databaseHelper = new DatabaseHelper();\r\n        databaseHelper.connect();\r\n*/\r\n\r\n        /* blocking out this code until the add event is completed\r\n        //checks if we are updating event or creating a new event\r\n        //this would execute different queries in the db\r\n        boolean isUpdate = false;\r\n        //bundle gets data from our fragment\r\n        final Bundle bundle = getArguments();\r\n        //if some tasks have already been passed for updating\r\n        if(bundle != null) {\r\n            //trying to update a event and not create a new event\r\n            isUpdate = true;\r\n            String event = bundle.getString(\"event\");\r\n            newEventText.setText(event);\r\n            if (event.length() > 0) {\r\n                //whenever event is existing, it will have a teal colour\r\n                newEventButton.setTextColor(ContextCompat.getColor(getContext(), R.color.teal_200));\r\n            }\r\n        }\r\n         */\r\n\r\n        //check if the xml id has been changed we will dull out the save button if blank task\r\n        eventTitle.addTextChangedListener(new TextWatcher() {\r\n\r\n            @Override\r\n            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                checkRequiredFields();\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable editable) {\r\n\r\n            }\r\n\r\n        });\r\n\r\n        eventStartTime.addTextChangedListener(new TextWatcher() {\r\n\r\n            @Override\r\n            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                checkRequiredFields();\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable editable) {\r\n\r\n            }\r\n\r\n        });\r\n\r\n        eventDate.addTextChangedListener(new TextWatcher() {\r\n\r\n            @Override\r\n            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                checkRequiredFields();\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable editable) {\r\n\r\n            }\r\n\r\n        });\r\n\r\n        eventLocation.addTextChangedListener(new TextWatcher() {\r\n\r\n            @Override\r\n            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n\r\n            }\r\n\r\n            @Override\r\n            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {\r\n                checkRequiredFields();\r\n            }\r\n\r\n            @Override\r\n            public void afterTextChanged(Editable editable) {\r\n\r\n            }\r\n\r\n        });\r\n\r\n\r\n\r\n        //onClick listener for when all fields are filled out\r\n        eventSaveBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                //pulls all the user inputs from the respective editable fields\r\n                String title = eventTitle.getText().toString();\r\n                String startTime = eventStartTime.getText().toString();\r\n                String oldDate = eventDate.getText().toString();\r\n                //converting the date to YYYY-MM-DD format before storage\r\n                String newDate = null;\r\n                try {\r\n                    newDate = convertDateFormat(oldDate);\r\n                } catch (ParseException e) {\r\n                    throw new RuntimeException(e);\r\n                }\r\n                String location = eventLocation.getText().toString();\r\n                //initialise the Event object\r\n                EventModel event = new EventModel();\r\n                //setting the setters of the Event object to reflect in the RecyclerView adapter\r\n                event.setEvent(title);\r\n                event.setStartTime(startTime);\r\n                event.setDate(newDate);\r\n                event.setLocation(location);\r\n                event.setStatus(0);\r\n                //setting the bitmap of the image selected\r\n                event.setEventCoverImage(imageToStore);\r\n                //insert the created Event into the database\r\n                db.insertEvent(event);\r\n                //method that populates the engagement table for all users after a new event is created\r\n                createEngagements();\r\n                dismiss();\r\n\r\n\r\n\r\n            }\r\n\r\n        });\r\n\r\n        //want to insert after the event is added to the eventList table\r\n\r\n\r\n        eventCancelBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                dismiss();\r\n            }\r\n        });\r\n\r\n        eventDate.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {\r\n                    @Override\r\n                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {\r\n                        myCalendar.set(Calendar.YEAR, year);\r\n                        myCalendar.set(Calendar.MONTH, month);\r\n                        myCalendar.set(Calendar.DAY_OF_MONTH, day);\r\n                        updateLabel();\r\n                    }\r\n                };\r\n                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),R.style.DatePickerCustom, date, myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));\r\n                datePickerDialog.show();\r\n                datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));\r\n                datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));\r\n\r\n                //new DatePickerDialog(getContext(),R.style.DatePickerCustom ,date, myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH)).show();\r\n\r\n            }\r\n        });\r\n\r\n\r\n        eventStartTime.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {\r\n                    @Override\r\n                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMin) {\r\n                        hour = selectedHour;\r\n                        min = selectedMin;\r\n                        eventStartTime.setText(String.format(Locale.getDefault(), \"%02d:%02d\", hour, min));\r\n                    }\r\n                };\r\n                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerCustom, time, hour , min, true);\r\n                timePickerDialog.setTitle(\"Select Time\");\r\n                timePickerDialog.show();\r\n\r\n                timePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));\r\n                timePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));\r\n            }\r\n        });\r\n\r\n        //on button click listener for when eventImageBtn is pressed\r\n        eventImageBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                //run the chooseCoverImage() method\r\n                chooseCoverImage();\r\n            }\r\n        });\r\n    }\r\n\r\n    //intent that launches the file folder in the user's device\r\n    public void chooseCoverImage() {\r\n        //creates a new intent\r\n        Intent objectIntent = new Intent();\r\n        //MIME type set as image as we want to return an image from the intent\r\n        objectIntent.setType(\"image/*\");\r\n        /*ACTION_GET_CONTENT is an implicit intent that allows the system to decide which is the best app to launch to fulfil this\r\n          i.e. system launches \"Files\" app as a result of the implicit intent\r\n         */\r\n        objectIntent.setAction(Intent.ACTION_GET_CONTENT);\r\n        startActivityForResult(objectIntent, PICK_IMAGE_REQUEST);\r\n    }\r\n\r\n    @Override\r\n    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {\r\n        try {\r\n            super.onActivityResult(requestCode, resultCode, data);\r\n            if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {\r\n                imageFilePath = data.getData();\r\n                imageToStore = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageFilePath);\r\n                eventCoverPhoto.setImageBitmap(imageToStore);\r\n            }\r\n        }\r\n        catch (Exception e) {\r\n\r\n        }\r\n\r\n    }\r\n\r\n    //checks all EditText fields to see if everything is filled out, otherwise disables the save button\r\n    public void checkRequiredFields() {\r\n        if (!eventTitle.getText().toString().isEmpty() && !eventStartTime.getText().toString().isEmpty() && !eventDate.getText().toString().isEmpty() && !eventLocation.getText().toString().isEmpty()) {\r\n            eventSaveBtn.setEnabled(true);\r\n        }\r\n        else {\r\n            eventSaveBtn.setEnabled(false);\r\n        }\r\n    }\r\n\r\n    //updates EditText field with the date that the user selected\r\n    public void updateLabel() {\r\n        String myFormat = \"dd/MM/yyyy\";\r\n        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);\r\n        eventDate.setText(dateFormat.format(myCalendar.getTime()));\r\n    }\r\n\r\n    public String convertDateFormat(String oldDate) throws ParseException {\r\n        SimpleDateFormat input = new SimpleDateFormat(\"dd/MM/yyyy\");\r\n        SimpleDateFormat output = new SimpleDateFormat(\"yyyy/MM/dd\");\r\n        Date converted = input.parse(oldDate);\r\n        String newDate = output.format(converted);\r\n        System.out.println(newDate);\r\n        return newDate;\r\n    }\r\n\r\n    public void createEngagements() {\r\n        //we want to trace down the event that was just inserted\r\n        List<EventModel> eventList = db.getAllEvents();\r\n        //to get the most recently added Event object, we get the length of the list minus 1\r\n        int listLength = eventList.size() - 1;\r\n        //create instance of Engagement object\r\n        EngagementModel newEngagement = new EngagementModel();\r\n        //get all the users\r\n        List<UserModel> userList = db.getAllUsers();\r\n        //loop over all users in the system and add new Engagements for all users, upon a new event creation\r\n        for (UserModel i : userList) {\r\n            //accessing the recently inserted event's getters and setting the id information into Engagement setter\r\n            newEngagement.setEventId(eventList.get(listLength).getId());\r\n            //default is not joined activity\r\n            newEngagement.setIsJoin(0);\r\n            //accessing the user's id and setting it to the setter method\r\n            newEngagement.setUserId(i.getId());\r\n            //call method from DatabaseHandler to insert into Engagement table\r\n            db.insertEngagement(newEngagement);\r\n        }\r\n\r\n    }\r\n\r\n\r\n    //this method is to ensure after updating the db, the RecyclerView is immediately updated\r\n    @Override\r\n    public void onDismiss(DialogInterface dialog) {\r\n        Activity activity = getActivity();\r\n        //DialogCloseListener is an interface in charge of updating RecyclerView\r\n        if (activity instanceof  DialogCloseListener) {\r\n            /*if the updating of events is called from an activity, we need to also run methods that\r\n              update the RecyclerView\r\n             */\r\n            ((DialogCloseListener)activity).handleDialogClose(dialog);\r\n\r\n        }\r\n    }\r\n}\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/eventprototype/AddNewEvent.java b/app/src/main/java/com/example/eventprototype/AddNewEvent.java
+--- a/app/src/main/java/com/example/eventprototype/AddNewEvent.java	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/app/src/main/java/com/example/eventprototype/AddNewEvent.java	(date 1680321731885)
+@@ -96,22 +96,6 @@
+         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
+         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
+ 
+-        //set up the toolbar
+-        menuTitle = getView().findViewById(R.id.toolbar_heading_backspace);
+-        menuTitle.setText("New Event");
+-        backBtn = getView().findViewById(R.id.backBtn);
+-        /*
+-        TODO: fix the style of this class, not sure that a fragment will work
+-        backBtn.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent intent = new Intent(AddNewEvent.this, DashboardActivity.class);
+-                //TODO: pass intent of user back here
+-                startActivity(intent);
+-            }
+-        });
+-         */
+-
+         //pass the activity to the DatabaseHandler
+         db = new DatabaseHandler(getActivity());
+         db.openDatabase();
+Index: app/src/main/res/layout/activity_azure_db.xml
+===================================================================
+diff --git a/app/src/main/res/layout/activity_azure_db.xml b/app/src/main/res/layout/activity_azure_db.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/activity_azure_db.xml	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ /dev/null	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
+@@ -1,34 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".Db.AzureDb">
+-
+-    <com.google.android.material.appbar.AppBarLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:theme="@style/Theme.EventPrototype.AppBarOverlay">
+-
+-        <androidx.appcompat.widget.Toolbar
+-            android:id="@+id/toolbar"
+-            android:layout_width="match_parent"
+-            android:layout_height="?attr/actionBarSize"
+-            android:background="?attr/colorPrimary"
+-            app:popupTheme="@style/Theme.EventPrototype.PopupOverlay" />
+-
+-    </com.google.android.material.appbar.AppBarLayout>
+-
+-    <include layout="@layout/content_azure_db" />
+-
+-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+-        android:id="@+id/fab"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_gravity="bottom|end"
+-        android:layout_marginEnd="@dimen/fab_margin"
+-        android:layout_marginBottom="16dp"
+-        app:srcCompat="@android:drawable/ic_dialog_email" />
+-
+-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/eventprototype/Db/AzureDatabaseHelper.java
+===================================================================
+diff --git a/app/src/main/java/com/example/eventprototype/Db/AzureDatabaseHelper.java b/app/src/main/java/com/example/eventprototype/Db/AzureDatabaseHelper.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/eventprototype/Db/AzureDatabaseHelper.java	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ /dev/null	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
+@@ -1,20 +0,0 @@
+-package com.example.eventprototype.Db;
+-
+-import java.sql.*;
+-
+-public class AzureDatabaseHelper {
+-    private Connection connection;
+-    public void connect() throws SQLException {
+-        String connectionString = "\n" +
+-                "jdbc:sqlserver://infs3605server.database.windows.net:1433;database=infs3605db;user=CloudSA04b2342e@infs3605server;password={your_password_here};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+-        connection = DriverManager.getConnection(connectionString);
+-    }
+-    public ResultSet executeQuery(String query) throws SQLException {
+-        Statement statement = connection.createStatement();
+-        ResultSet resultSet = statement.executeQuery(query);
+-        return resultSet;
+-    }
+-
+-
+-}
+-
+Index: app/src/main/res/layout/content_azure_db.xml
+===================================================================
+diff --git a/app/src/main/res/layout/content_azure_db.xml b/app/src/main/res/layout/content_azure_db.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/content_azure_db.xml	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ /dev/null	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
+@@ -1,19 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+-
+-    <fragment
+-        android:id="@+id/nav_host_fragment_content_azure_db"
+-        android:name="androidx.navigation.fragment.NavHostFragment"
+-        android:layout_width="0dp"
+-        android:layout_height="0dp"
+-        app:defaultNavHost="true"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:navGraph="@navigation/nav_graph" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_11\" default=\"true\" project-jdk-name=\"Android Studio default JDK\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 2d67b18e164ec14e0aec08c9dfb0e745746f98d3)
++++ b/.idea/misc.xml	(date 1680322065804)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
