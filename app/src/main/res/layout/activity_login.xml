@@ -17,11 +17,11 @@
         android:id="@+id/unsw_logo_w"
         android:layout_width="150dp"
         android:layout_height="63.64dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="36dp"
         android:background="@drawable/logo_white_unsw"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/include" />
 
     <Switch
         android:id="@+id/theme_switch"

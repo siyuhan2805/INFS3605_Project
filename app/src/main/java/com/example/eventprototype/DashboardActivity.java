@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
     private TextView menuTitle;
     private ImageView logoutBtn;
     private ArrayList<UserModel> userList;
+    private WebView dashboardView;
 
 
     @SuppressLint("MissingInflatedId")
@@ -28,6 +30,13 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        //set up dashboard
+        dashboardView = findViewById(R.id.dashboardView);
+        String dashboardUrl = "https://app.powerbi.com/";
+        String iframeSrc = "https://app.powerbi.com/view?r=eyJrIjoiODFlMWJlNmYtNjFjYi00ZmY5LTk2ZmEtNWM3MmQwNTFlNWU3IiwidCI6IjliN2JmYmI2LTllN2EtNDFlYS05NDIwLThhY2VkNDM3ZDM0YiJ9";
+        String htmlData = "<iframe title=\"Report Section\" width=\"380\" height=\"500\" src=\'" + iframeSrc + "'' frameborder=\"0\" allowFullScreen=\"true\"></iframe>";
+        dashboardView.loadDataWithBaseURL(dashboardUrl, htmlData, "text/html", "UTF-8", null);
 
         //set up the toolbar
         menuTitle = findViewById(R.id.toolbar_heading_logout);
