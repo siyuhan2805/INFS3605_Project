@@ -43,6 +43,11 @@
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".SignUpExtraActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
+        </activity>
 
     </application>
 

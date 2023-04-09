@@ -38,6 +38,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String STAFF = "isStaff";
+    private static final String INTERNATIONAL = "isInternational";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String DOB = "dob";
+    private static final String COUNTRY = "country";
+    private static final String DEGREE = "degree";
     private static final String USER_ID = "userId";
     private static final String ENGAGEMENT_TABLE = "engagement";
     private static final String ENGAGEMENT_ID = "engagementId";
@@ -73,7 +79,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + USERNAME + " TEXT, "
             + PASSWORD + " TEXT, "
+            + FIRST_NAME + " TEXT, "
+            + LAST_NAME + " TEXT, "
+            + DOB + " TEXT, "
+            + DEGREE + " TEXT, "
+            + COUNTRY + " TEXT, "
+            + INTERNATIONAL + " INTEGER, "
             + STAFF + " INTEGER)";
+
     private SQLiteDatabase db;
 
     private ByteArrayOutputStream byteArrayOutputStream;
@@ -118,6 +131,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cv.put(USERNAME, user.getUsername());
         cv.put(PASSWORD, user.getPassword());
         cv.put(STAFF, user.getIsStaff());
+        cv.put(INTERNATIONAL, user.getIsInternational());
+        cv.put(FIRST_NAME, user.getFirstName());
+        cv.put(LAST_NAME, user.getLastName());
+        cv.put(DEGREE, user.getDegree());
+        cv.put(COUNTRY, user.getCountry());
+        cv.put(DOB, user.getDob());
         //insert the above info into the USERS table
         db.insert(USER_TABLE, null, cv);
     }
@@ -194,6 +213,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                     user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    user.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                    user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                    user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                    user.setDegree(cursor.getString(cursor.getColumnIndex(DEGREE)));
+                    user.setDob(cursor.getString(cursor.getColumnIndex(DOB)));
+                    user.setCountry(cursor.getString(cursor.getColumnIndex(COUNTRY)));
                     //returns the user information should it have the correct login details
                     userList.add(user);
 
@@ -246,6 +271,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                     user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    user.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                    user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                    user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                    user.setDegree(cursor.getString(cursor.getColumnIndex(DEGREE)));
+                    user.setDob(cursor.getString(cursor.getColumnIndex(DOB)));
+                    user.setCountry(cursor.getString(cursor.getColumnIndex(COUNTRY)));
                     //adds user object to the userList
                     userList.add(user);
                 }while (cursor.moveToNext());
@@ -380,8 +411,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //convert ID to a string for db match on ID note: that ID was denoted as a String
         db.update(ENGAGEMENT_TABLE, cv, EVENT_ID + "=? AND " + USER_ID + "=?", new String[] {String.valueOf(eventId), String.valueOf(userId)});
     }
-
-
 
     //method for updating status
     public void updateStatus(int eventId, int status) {
