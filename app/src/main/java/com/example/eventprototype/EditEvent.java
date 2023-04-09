@@ -8,7 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,34 +20,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.eventprototype.Db.DatabaseHandler;
-import com.example.eventprototype.Model.EngagementModel;
 import com.example.eventprototype.Model.EventModel;
-import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-public class AddNewEvent extends DialogFragment {
-
+public class EditEvent extends DialogFragment {
     public static final String TAG = "ActionBottomDialog";
 
     private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation;
+    private EventModel editEvent;
     private Button eventSaveBtn, eventImageBtn;
     private ImageView eventCoverPhoto;
     private ImageView eventCancelBtn;
@@ -56,22 +49,20 @@ public class AddNewEvent extends DialogFragment {
     private int hour;
     private int min;
     private Uri imageFilePath;
+    //boolean to keep track of whether user has pressed the "Add Cover Photo" button
+    private int addCoverPhotoCounter = 0;
     private Bitmap imageToStore;
     private static final int PICK_IMAGE_REQUEST = 100;
-    private ImageView backBtn;
-    private TextView menuTitle;
 
-
-    //used to return object of AddNewEvent class so MainActivity can call the methods
-    public static AddNewEvent newInstance() {
-        return new AddNewEvent();
+    public static EditEvent newInstance() {
+        return new EditEvent();
     }
 
-    //savedInstanceState checks if this fragment exists in the memory
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, R.style.DialogStyle);
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +78,9 @@ public class AddNewEvent extends DialogFragment {
         //getView is used as it is a fragment
         //setting the xml components
 
+        Bundle bundle = getArguments();
+        editEvent = (EventModel) bundle.getSerializable("clickedRow");
+
         eventCoverPhoto = getView().findViewById(R.id.eventCoverPhoto);
         eventTitle = getView().findViewById(R.id.eventTitle);
         eventStartTime = getView().findViewById(R.id.eventStartTime);
@@ -96,21 +90,21 @@ public class AddNewEvent extends DialogFragment {
         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
 
-        //set up the toolbar
-        menuTitle = getView().findViewById(R.id.toolbar_heading_backspace);
-        menuTitle.setText("New Event");
-        backBtn = getView().findViewById(R.id.backBtn);
-        /*
-        TODO: fix the style of this class, not sure that a fragment will work
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddNewEvent.this, DashboardActivity.class);
-                //TODO: pass intent of user back here
-                startActivity(intent);
-            }
-        });
-         */
+        //setting the fields to the event that the user clicked on
+        eventCoverPhoto.setImageBitmap(editEvent.getEventCoverImage());
+        eventTitle.setText(editEvent.getEvent());
+        eventStartTime.setText(editEvent.getStartTime());
+        try {
+            String updatedDate = convertDateFormat(editEvent.getDate());
+            eventDate.setText(updatedDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        eventLocation.setText(editEvent.getLocation());
+
+        //check required fields method to ensure user can save without making any changes to the event
+        checkRequiredFields();
 
         //pass the activity to the DatabaseHandler
         db = new DatabaseHandler(getActivity());
@@ -213,7 +207,6 @@ public class AddNewEvent extends DialogFragment {
         });
 
 
-
         //onClick listener for when all fields are filled out
         eventSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,35 +218,25 @@ public class AddNewEvent extends DialogFragment {
                 //converting the date to YYYY-MM-DD format before storage
                 String newDate = null;
                 try {
-                    newDate = convertDateFormat(oldDate);
+                    newDate = convertDateFormatDb(oldDate);
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
                 String location = eventLocation.getText().toString();
-                //initialise the Event object
-                EventModel event = new EventModel();
-                //setting the setters of the Event object to reflect in the RecyclerView adapter
-                event.setEvent(title);
-                event.setStartTime(startTime);
-                event.setDate(newDate);
-                event.setLocation(location);
-                event.setStatus(0);
-                //setting the bitmap of the image selected
-                event.setEventCoverImage(imageToStore);
-                //insert the created Event into the database
-                db.insertEvent(event);
-                //method that populates the engagement table for all users after a new event is created
-                createEngagements();
+                db.updateStatus(editEvent.getId(), 0);
+                db.updateEvent(editEvent.getId(), title);
+                db.updateStartTime(editEvent.getId(), startTime);
+                db.updateLocation(editEvent.getId(), location);
+                db.updateDate(editEvent.getId(), newDate);
+                //user hasn't updated the cover photo
+                if (addCoverPhotoCounter == 0) {
+                    imageToStore = ((BitmapDrawable)eventCoverPhoto.getDrawable()).getBitmap();
+                }
+                db.updateCoverImage(editEvent.getId(), imageToStore);
+                //createEngagements();
                 dismiss();
-
-
-
             }
-
         });
-
-        //want to insert after the event is added to the eventList table
-
 
         eventCancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,7 +257,7 @@ public class AddNewEvent extends DialogFragment {
                         updateLabel();
                     }
                 };
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),R.style.DatePickerCustom, date, myCalendar.get(Calendar.YEAR),myCalendar.get(Calendar.MONTH),myCalendar.get(Calendar.DAY_OF_MONTH));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), R.style.DatePickerCustom, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
                 datePickerDialog.show();
                 datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));
                 datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.themeSecondaryColor));
@@ -296,7 +279,7 @@ public class AddNewEvent extends DialogFragment {
                         eventStartTime.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, min));
                     }
                 };
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerCustom, time, hour , min, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerCustom, time, hour, min, true);
                 timePickerDialog.setTitle("Select Time");
                 timePickerDialog.show();
 
@@ -309,13 +292,14 @@ public class AddNewEvent extends DialogFragment {
         eventImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //indicate that user has tried to update cover photo
+                addCoverPhotoCounter = 1;
                 //run the chooseCoverImage() method
                 chooseCoverImage();
             }
         });
     }
 
-    //intent that launches the file folder in the user's device
     public void chooseCoverImage() {
         //creates a new intent
         Intent objectIntent = new Intent();
@@ -341,7 +325,6 @@ public class AddNewEvent extends DialogFragment {
         catch (Exception e) {
 
         }
-
     }
 
     //checks all EditText fields to see if everything is filled out, otherwise disables the save button
@@ -354,7 +337,6 @@ public class AddNewEvent extends DialogFragment {
         }
     }
 
-    //updates EditText field with the date that the user selected
     public void updateLabel() {
         String myFormat = "dd/MM/yyyy";
         SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.US);
@@ -362,6 +344,15 @@ public class AddNewEvent extends DialogFragment {
     }
 
     public String convertDateFormat(String oldDate) throws ParseException {
+        SimpleDateFormat input = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat output = new SimpleDateFormat("dd/MM/yyyy");
+        Date converted = input.parse(oldDate);
+        String newDate = output.format(converted);
+        System.out.println(newDate);
+        return newDate;
+    }
+
+    public String convertDateFormatDb(String oldDate) throws ParseException {
         SimpleDateFormat input = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat output = new SimpleDateFormat("yyyy/MM/dd");
         Date converted = input.parse(oldDate);
@@ -370,30 +361,13 @@ public class AddNewEvent extends DialogFragment {
         return newDate;
     }
 
-    public void createEngagements() {
-        //we want to trace down the event that was just inserted
-        List<EventModel> eventList = db.getAllEvents();
-        //to get the most recently added Event object, we get the length of the list minus 1
-        int listLength = eventList.size() - 1;
-        //create instance of Engagement object
-        EngagementModel newEngagement = new EngagementModel();
-        //get all the users
-        List<UserModel> userList = db.getAllUsers();
-        //loop over all users in the system and add new Engagements for all users, upon a new event creation
-        for (UserModel i : userList) {
-            //accessing the recently inserted event's getters and setting the id information into Engagement setter
-            newEngagement.setEventId(eventList.get(listLength).getId());
-            //default is not joined activity
-            newEngagement.setIsJoin(0);
-            //accessing the user's id and setting it to the setter method
-            newEngagement.setUserId(i.getId());
-            //call method from DatabaseHandler to insert into Engagement table
-            db.insertEngagement(newEngagement);
-        }
+    //method to update the engagements for all users
+    public void updateEngagements() {
+
     }
 
-    //this abstract method is to ensure after updating the db, the RecyclerView is immediately updated
-    @Override
+
+
     public void onDismiss(DialogInterface dialog) {
         Activity activity = getActivity();
         //DialogCloseListener is an interface in charge of updating RecyclerView
@@ -405,26 +379,6 @@ public class AddNewEvent extends DialogFragment {
 
         }
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

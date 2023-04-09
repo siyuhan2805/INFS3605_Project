@@ -38,6 +38,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String STAFF = "isStaff";
+    private static final String INTERNATIONAL = "isInternational";
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String DOB = "dob";
+    private static final String COUNTRY = "country";
+    private static final String DEGREE = "degree";
     private static final String USER_ID = "userId";
     private static final String ENGAGEMENT_TABLE = "engagement";
     private static final String ENGAGEMENT_ID = "engagementId";
@@ -73,7 +79,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + USERNAME + " TEXT, "
             + PASSWORD + " TEXT, "
+            + FIRST_NAME + " TEXT, "
+            + LAST_NAME + " TEXT, "
+            + DOB + " TEXT, "
+            + DEGREE + " TEXT, "
+            + COUNTRY + " TEXT, "
+            + INTERNATIONAL + " INTEGER, "
             + STAFF + " INTEGER)";
+
     private SQLiteDatabase db;
 
     private ByteArrayOutputStream byteArrayOutputStream;
@@ -118,6 +131,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cv.put(USERNAME, user.getUsername());
         cv.put(PASSWORD, user.getPassword());
         cv.put(STAFF, user.getIsStaff());
+        cv.put(INTERNATIONAL, user.getIsInternational());
+        cv.put(FIRST_NAME, user.getFirstName());
+        cv.put(LAST_NAME, user.getLastName());
+        cv.put(DEGREE, user.getDegree());
+        cv.put(COUNTRY, user.getCountry());
+        cv.put(DOB, user.getDob());
         //insert the above info into the USERS table
         db.insert(USER_TABLE, null, cv);
     }
@@ -128,7 +147,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cv.put(ISJOIN, engagement.getIsJoin());
         cv.put(USER_ID, engagement.getUserId());
         cv.put(EVENT_ID, engagement.getEventId());
-        //inserrt the above info into the ENGAGEMENT table
+        //insert the above info into the ENGAGEMENT table
         db.insert(ENGAGEMENT_TABLE, null, cv);
     }
 
@@ -136,6 +155,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //ContentValues is a key/value store that inserts data into a row of a table
         ContentValues cv = new ContentValues();
         //no ID needed as that is already auto-incremented
+        cv.put(EVENT, event.getEvent());
+        cv.put(START_TIME, event.getStartTime());
+        cv.put(DATE, event.getDate());
+        cv.put(LOCATION, event.getLocation());
+        cv.put(STATUS, 0);
+        /*prepping for the image insert as setters are storing image as a bitmap but we have to convert
+          to bytes before storing
+         */
+        Bitmap imageToStoreBitmap = event.getEventCoverImage();
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        imageToStoreBitmap.compress(Bitmap.CompressFormat.JPEG,100, byteArrayOutputStream);
+        //convert image to an array of bytes for storage in database
+        imageInBytes = byteArrayOutputStream.toByteArray();
+        //bytes to be stored and passed in ContentValues
+        cv.put(IMAGE, imageInBytes);
+        //insert the above info into the table below
+        db.insert(EVENT_TABLE, null, cv);
+    }
+
+    //method that is called to re-insert the deleted event back in the original spot in the database
+    //only difference is now it takes into account of the Event_ID
+    public void insertDeletedEvent(EventModel event) {
+        //ContentValues is a key/value store that inserts data into a row of a table
+        ContentValues cv = new ContentValues();
+        //only diff
+        cv.put(EVENT_ID, event.getId());
         cv.put(EVENT, event.getEvent());
         cv.put(START_TIME, event.getStartTime());
         cv.put(DATE, event.getDate());
@@ -168,6 +213,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                     user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    user.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                    user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                    user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                    user.setDegree(cursor.getString(cursor.getColumnIndex(DEGREE)));
+                    user.setDob(cursor.getString(cursor.getColumnIndex(DOB)));
+                    user.setCountry(cursor.getString(cursor.getColumnIndex(COUNTRY)));
                     //returns the user information should it have the correct login details
                     userList.add(user);
 
@@ -201,7 +252,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     //adds event object to the eventList
                     upEventList.add(upComingEvent);
 
-
                 } while (cursor.moveToNext());
             }
         }
@@ -221,6 +271,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     user.setUsername(cursor.getString(cursor.getColumnIndex(USERNAME)));
                     user.setPassword(cursor.getString(cursor.getColumnIndex(PASSWORD)));
                     user.setIsStaff(cursor.getInt(cursor.getColumnIndex(STAFF)));
+                    user.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                    user.setFirstName(cursor.getString(cursor.getColumnIndex(FIRST_NAME)));
+                    user.setLastName(cursor.getString(cursor.getColumnIndex(LAST_NAME)));
+                    user.setDegree(cursor.getString(cursor.getColumnIndex(DEGREE)));
+                    user.setDob(cursor.getString(cursor.getColumnIndex(DOB)));
+                    user.setCountry(cursor.getString(cursor.getColumnIndex(COUNTRY)));
                     //adds user object to the userList
                     userList.add(user);
                 }while (cursor.moveToNext());
@@ -240,7 +296,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         try {
             //return all the rows from the db without any criteria
             //cursor is the current row being pointed to in the SQL result
-            cursor = db.query(EVENT_TABLE, null, null, null, null, null, null, null);
+            cursor = db.query(EVENT_TABLE, null, null, null, null, null, EVENT_ID + " ASC", null);
             if (cursor != null) {
                 //moveToFirst will return false if the first line pointed to by the cursor is empty
                 if (cursor.moveToFirst()) {
@@ -270,6 +326,56 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return eventList;
     }
 
+    @SuppressLint("Range")
+    public List<EventModel> getAllUserEvents(int userId) {
+        List<EventModel> userEventList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT" + " eventList.eventId, "
+                + "eventList.event, "
+                + "eventList.status, "
+                + "eventList.eventDate, "
+                + "eventList.image, "
+                + "eventList.eventStartTime, "
+                + "eventList.eventLocation, "
+                + "engagement.isJoin "
+                + "FROM " + EVENT_TABLE + " JOIN " + ENGAGEMENT_TABLE + " ON " + "eventList.eventId = " + "engagement.eventId"
+                + " WHERE " + "engagement.userId = ?"
+                + " ORDER BY " + "eventList.eventId", new String[]{String.valueOf(userId)});
+        //will ensure the database doesn't get corrupted should we read/write data and accidentally close app
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        EventModel userEvent = new EventModel();
+                        userEvent.setId(cursor.getInt(cursor.getColumnIndex(EVENT_ID)));
+                        userEvent.setEvent(cursor.getString(cursor.getColumnIndex(EVENT)));
+                        userEvent.setStartTime(cursor.getString(cursor.getColumnIndex(START_TIME)));
+                        userEvent.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+                        userEvent.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
+                        userEvent.setStatus(cursor.getInt(cursor.getColumnIndex(STATUS)));
+                        //convert the stored db images into Bitmap as they are stored as bytes
+                        byte [] dbBytesImage = cursor.getBlob(cursor.getColumnIndex(IMAGE));
+                        Bitmap objectBitmap = BitmapFactory.decodeByteArray(dbBytesImage, 0, dbBytesImage.length);
+                        //setting the getters/setters
+                        userEvent.setEventCoverImage(objectBitmap);
+                        //adds event object to the eventList
+                        userEvent.setIsJoin(cursor.getInt(cursor.getColumnIndex(ISJOIN)));
+                        userEventList.add(userEvent);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return userEventList;
+    }
+
+
     /*
     public void storeImage(EventModel eventModel) {
         try {
@@ -298,46 +404,72 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
      */
 
-
+    public void updateEngagement(int userId, int eventId, int isJoin) {
+        ContentValues cv = new ContentValues();
+        cv.put(ISJOIN, isJoin);
+        //? is for formatting purposes
+        //convert ID to a string for db match on ID note: that ID was denoted as a String
+        db.update(ENGAGEMENT_TABLE, cv, EVENT_ID + "=? AND " + USER_ID + "=?", new String[] {String.valueOf(eventId), String.valueOf(userId)});
+    }
 
     //method for updating status
-    public void updateStatus(int id, int status) {
+    public void updateStatus(int eventId, int status) {
         ContentValues cv = new ContentValues();
         cv.put(STATUS, status);
         //? is for formatting purposes
         //convert ID to a string for db match on ID note: that ID was denoted as a String
-        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
     }
 
     //method for updating event
-    public void updateEvent(int id, String event) {
+    public void updateEvent(int eventId, String event) {
         ContentValues cv = new ContentValues();
         //cv.put takes in the column to update and the new value
         cv.put(EVENT, event);
-        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
     }
 
-    public void updateStartTime(int id, String startTime) {
+    public void updateStartTime(int eventId, String startTime) {
         ContentValues cv = new ContentValues();
         cv.put(START_TIME, startTime);
-        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
     }
 
-    public void updateDate(int id, String endTime) {
+    public void updateDate(int eventId, String endTime) {
         ContentValues cv = new ContentValues();
         cv.put(DATE, endTime);
-        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
     }
 
-    public void updateLocation(int id, String location) {
+    public void updateLocation(int eventId, String location) {
         ContentValues cv = new ContentValues();
         cv.put(LOCATION, location);
-        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
+    }
+
+    public void updateCoverImage(int eventId, Bitmap imageToStoreBitmap) {
+         /*prepping for the image insert as setters are storing image as a bitmap but we have to convert
+          to bytes before storing
+         */
+        ContentValues cv = new ContentValues();
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        imageToStoreBitmap.compress(Bitmap.CompressFormat.JPEG,100, byteArrayOutputStream);
+        //convert image to an array of bytes for storage in database
+        imageInBytes = byteArrayOutputStream.toByteArray();
+        //bytes to be stored and passed in ContentValues
+        cv.put(IMAGE, imageInBytes);
+        //update the table
+        db.update(EVENT_TABLE, cv, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
     }
 
     //method for deleting event
-    public void deleteEvent(int id) {
-        db.delete(EVENT_TABLE, EVENT_ID + "=?", new String[] {String.valueOf(id)});
+    public void deleteEvent(int eventId) {
+        //query to delete the event
+        db.delete(EVENT_TABLE, EVENT_ID + "=?", new String[] {String.valueOf(eventId)});
+    }
+
+    public void deleteEngagement(int userId, int eventId) {
+        db.delete(ENGAGEMENT_TABLE, EVENT_ID + "=? AND " + USER_ID + "=?", new String[] {String.valueOf(eventId), String.valueOf(userId)});
     }
 
 

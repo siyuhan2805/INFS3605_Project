@@ -93,6 +93,8 @@
         app:boxBackgroundColor="#0DBF81FF"
         app:boxStrokeColor="#99BF81FF"
         app:hintTextColor="@color/white"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginZidLayout">
@@ -102,6 +104,7 @@
             android:textCursorDrawable="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:hint="Enter zid password"
             android:textColor="@color/white" />
 
