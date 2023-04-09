@@ -1,8 +1,14 @@
 package com.example.eventprototype.Model;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class EventModel {
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+
+public class EventModel implements Serializable, Parcelable {
     private int id, status;
     //"event" is the name of the event in SQLITE
     private int isJoin;
@@ -76,5 +82,15 @@ public class EventModel {
 
     public void setIsJoin(int isJoin) {
         this.isJoin = isJoin;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+
     }
 }

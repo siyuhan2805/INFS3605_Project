@@ -102,7 +102,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     //reload list
                     eventList = db.getAllUserEvents(currentUser.get(0).getId());
                     //reverse list order
-                    Collections.reverse(eventList);
+                    //Collections.reverse(eventList);
                     Toast.makeText(view.getContext(), "ITEM PRESSED = " + item.getIsJoin(), Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
                 }
@@ -115,7 +115,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
                     //reload list
                     eventList = db.getAllUserEvents(currentUser.get(0).getId());
                     //reverse list order
-                    Collections.reverse(eventList);
+                    //Collections.reverse(eventList);
                     Toast.makeText(view.getContext(), "ITEM PRESSED = " + item.getIsJoin(), Toast.LENGTH_SHORT).show();
                     notifyDataSetChanged();
                 }
