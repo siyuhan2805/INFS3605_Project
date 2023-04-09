@@ -29,9 +29,9 @@ public class SignUpActivity extends AppCompatActivity {
     private AppCompatButton btnLogin;
     private DatabaseHandler db;
     private SignUpActivity activity;
-    private TextInputEditText signUpPasswordEt;
-    private TextInputEditText signUpZidEt;
+    private TextInputEditText signUpPasswordEt, signUpZidEt, signUpHomeCountryEt;
     private CheckBox staffCheckBox;
+    private CheckBox internationalCheckBox;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.loginSignupBtn);
         signUpPasswordEt = findViewById(R.id.signUpPasswordEt);
         signUpZidEt = findViewById(R.id.signUpZidEt);
+        internationalCheckBox = findViewById(R.id.internationalCheckBox);
+        signUpHomeCountryEt = findViewById(R.id.signUpHomeCountryEt);
 
         //open database
         db = new DatabaseHandler(this);
@@ -125,19 +127,34 @@ public class SignUpActivity extends AppCompatActivity {
         String username = signUpZidEt.getText().toString();
         String password = signUpPasswordEt.getText().toString();
         int isStaff;
+        int isInternational;
+        String homeCountry = signUpPasswordEt.getText().toString();
+
         //check if staff checkbox is checked or not
         if (staffCheckBox.isChecked()) {
             isStaff = 1;
-        }
-        else {
+        } else {
             isStaff = 0;
         }
+
+        //check if student is an international student or not
+        if (internationalCheckBox.isChecked()) {
+            isInternational = 1;
+        } else {
+            isInternational = 0;
+        }
+
         //initialise the User object
         UserModel user = new UserModel();
         //setting the setters of the User model
         user.setIsStaff(isStaff);
         user.setUsername(username);
         user.setPassword(password);
+        /*
+        commented out till added in db
+        user.setIsInternational(isInternational);
+        user.setHomeCountry(homeCountry);
+         */
         db.insertUser(user);
     }
 

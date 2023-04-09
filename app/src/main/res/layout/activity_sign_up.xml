@@ -63,16 +63,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="290dp"
         android:layout_height="56dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:elevation="4dp"
+        android:textColorHint="@color/white"
+        app:boxBackgroundColor="#0DBF81FF"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
-        android:textColorHint="@color/white"
-        app:boxStrokeWidth="1dp"
-        app:boxBackgroundColor="#0DBF81FF"
         app:boxStrokeColor="#99BF81FF"
+        app:boxStrokeWidth="1dp"
         app:hintTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,11 +80,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signUpZidEt"
-            android:textCursorDrawable="@null"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Enter zid (z123456)"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,16 +93,16 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="290dp"
         android:layout_height="56dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:elevation="4dp"
+        android:textColorHint="@color/white"
+        app:boxBackgroundColor="#0DBF81FF"
         app:boxCornerRadiusBottomEnd="10dp"
         app:boxCornerRadiusBottomStart="10dp"
         app:boxCornerRadiusTopEnd="10dp"
         app:boxCornerRadiusTopStart="10dp"
-        android:textColorHint="@color/white"
-        app:boxStrokeWidth="1dp"
-        app:boxBackgroundColor="#0DBF81FF"
         app:boxStrokeColor="#99BF81FF"
+        app:boxStrokeWidth="1dp"
         app:hintTextColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,48 +110,88 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/signUpPasswordEt"
-            android:textCursorDrawable="@null"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter zid password"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="290dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:elevation="4dp"
+        android:textColorHint="@color/white"
+        app:boxBackgroundColor="#0DBF81FF"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:boxStrokeColor="#99BF81FF"
+        app:boxStrokeWidth="1dp"
+        app:hintTextColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signUpHomeCountryEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your home country"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@null" />
 
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!--TODO fix format of checkbox-->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signUpBtn"
+        android:layout_width="290dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_filled_in"
+        android:elevation="4dp"
+        android:enabled="false"
+        android:text="Sign Up"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/internationalCheckBox" />
 
     <CheckBox
         android:id="@+id/staffCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:buttonTint="#99BF81FF"
         android:fillColor="#0DBF81FF"
         android:strokeWidth="2"
         android:text="Check box if you are staff"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/signUpBtn"
-        android:layout_width="290dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="80dp"
-        android:background="@drawable/button_filled_in"
-        android:elevation="4dp"
-        android:text="Sign Up"
-        android:enabled="false"
+    <CheckBox
+        android:id="@+id/internationalCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-16dp"
+        android:buttonTint="#99BF81FF"
+        android:fillColor="#0DBF81FF"
+        android:strokeWidth="2"
+        android:text="Check box if you are an International Student"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintStart_toStartOf="@+id/staffCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/staffCheckBox" />
 
     <TextView
         android:id="@+id/textView3"
