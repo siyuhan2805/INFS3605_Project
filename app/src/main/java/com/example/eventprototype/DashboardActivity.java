@@ -2,10 +2,13 @@ package com.example.eventprototype;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,16 @@ import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jwt.*;
+//import com.nimbusds.jwt.JWTClaimsSet.Builder;
+
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.*;
 
 public class DashboardActivity extends AppCompatActivity {
     private NavigationBarView navigationView;
@@ -33,12 +46,15 @@ public class DashboardActivity extends AppCompatActivity {
 
         //set up dashboard
         dashboardView = findViewById(R.id.dashboardView);
-        //String dashboardUrl = "https://public.tableau.com/shared/MHTWW4D6W?:display_count=n&:origin=viz_share_link&:embed=y";
-        //String htmlData = "<div class='tableauPlaceholder' id='viz1680405248722' style='position: relative'><noscript><a href='https:&#47;&#47;www.mckinsey.com&#47;global-themes&#47;artificial-intelligence&#47;notes-from-the-ai-frontier-applications-and-value-of-deep-learning'><img alt='Estimated impact of artificial intelligence and other analytics by industry, function and business problem. ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;ST&#47;STDCFJM79&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='path' value='shared&#47;STDCFJM79' /> <param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;ST&#47;STDCFJM79&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='filter' value='showVizhome=no' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1680405248722');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='640px';vizElement.style.height='1227px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>";
-        //dashboardView.loadDataWithBaseURL(dashboardUrl, htmlData, "text/html", "UTF-8", null);
-
         dashboardView.getSettings().setJavaScriptEnabled(true);
-        dashboardView.loadUrl("https://public.tableau.com/shared/MHTWW4D6W?:showVizHome=no");
+
+        /*
+        String dashboardUrl = "https://prod-apsoutheast-a.online.tableau.com/t/infs3605/views/INFS3605/Dashboard1";
+        String htmlData = "<script type='module' src='https://prod-apsoutheast-a.online.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js'></script><tableau-viz id='tableau-viz' src='https://prod-apsoutheast-a.online.tableau.com/t/infs3605/views/INFS3605/Dashboard1' width='1247' height='570' hide-tabs toolbar='bottom' device='default' ></tableau-viz>";
+        dashboardView.loadDataWithBaseURL(dashboardUrl, htmlData, "text/html", "UTF-8", null);
+         */
+
+        dashboardView.loadUrl("https://unswerm.github.io/");
 
         //set up the toolbar
         menuTitle = findViewById(R.id.toolbar_heading_logout);
@@ -93,6 +109,5 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
