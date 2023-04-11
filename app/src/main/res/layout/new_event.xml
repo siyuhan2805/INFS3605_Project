@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar_heading_backspace"/>
+        layout="@layout/toolbar_heading_only"/>
 
     <ImageView
         android:id="@+id/imageView2"

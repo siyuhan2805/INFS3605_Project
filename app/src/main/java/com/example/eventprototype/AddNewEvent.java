@@ -38,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,8 +59,9 @@ public class AddNewEvent extends DialogFragment {
     private Uri imageFilePath;
     private Bitmap imageToStore;
     private static final int PICK_IMAGE_REQUEST = 100;
-    private ImageView backBtn;
     private TextView menuTitle;
+    private ImageView backBtn;
+    private ArrayList<UserModel> userList;
 
 
     //used to return object of AddNewEvent class so MainActivity can call the methods
@@ -96,10 +98,9 @@ public class AddNewEvent extends DialogFragment {
         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
 
-        //set up the toolbar
-        menuTitle = getView().findViewById(R.id.toolbar_heading_backspace);
+        menuTitle = getView().findViewById(R.id.toolbar_heading_only);
         menuTitle.setText("New Event");
-        backBtn = getView().findViewById(R.id.backBtn);
+
         /*
         TODO: fix the style of this class, not sure that a fragment will work
         backBtn.setOnClickListener(new View.OnClickListener() {

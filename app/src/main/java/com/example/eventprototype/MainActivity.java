@@ -12,11 +12,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.eventprototype.Adapter.EventAdapter;
@@ -49,12 +52,29 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private List<UserModel> currentUser;
     private DatabaseHandler db;
     private FloatingActionButton fab;
+    private TextView menuTitle;
+    private ImageView backBtn;
+    private ArrayList<UserModel> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_only_heading);
+        menuTitle.setText("");
+        backBtn = findViewById(R.id.backBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,
+                        DashboardActivity.class);
+                intent.putExtra("currentUser", userList);
+                startActivity(intent);
+            }
+        });
 
         //get the intent passed from the LoginActivity
         currentUser = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");

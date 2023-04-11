@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar_heading_logout"/>
+        layout="@layout/toolbar_heading_backspace"/>
 
     <ImageView
         android:id="@+id/imageView"

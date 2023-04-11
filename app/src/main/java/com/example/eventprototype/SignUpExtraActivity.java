@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,12 +34,17 @@ public class SignUpExtraActivity extends AppCompatActivity {
     private TextInputEditText signUpFirstNameEt, signUpLastNameEt, signUpDegreeEt, signUpDobEt;
     private DatabaseHandler db;
     private List<UserModel> newUserInfo;
+    private TextView menuTitle;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_extra);
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_only_heading);
+        menuTitle.setText("");
 
         signUpBtn = findViewById(R.id.signUpBtn);
         loginSignupBtn = findViewById(R.id.loginSignupBtn);

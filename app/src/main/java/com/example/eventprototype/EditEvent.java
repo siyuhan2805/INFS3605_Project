@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,7 @@ public class EditEvent extends DialogFragment {
     private int addCoverPhotoCounter = 0;
     private Bitmap imageToStore;
     private static final int PICK_IMAGE_REQUEST = 100;
+    private TextView menuTitle;
 
     public static EditEvent newInstance() {
         return new EditEvent();
@@ -75,9 +77,12 @@ public class EditEvent extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        menuTitle = getView().findViewById(R.id.toolbar_heading_only);
+        menuTitle.setText("Event Created");
+
         //getView is used as it is a fragment
         //setting the xml components
-
         Bundle bundle = getArguments();
         editEvent = (EventModel) bundle.getSerializable("clickedRow");
 

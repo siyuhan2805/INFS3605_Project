@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity activity;
     private boolean isStaff = false;
     private TextView menuTitle;
-    private Toolbar toolbar;
+
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //set up the toolbar
-        toolbar = findViewById(R.id.toolbar_heading_only);
         menuTitle = findViewById(R.id.toolbar_heading_only_heading);
         menuTitle.setText("");
 

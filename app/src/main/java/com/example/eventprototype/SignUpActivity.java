@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,10 +34,15 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputEditText signUpZidEt, signUpCountryEt;
     private CheckBox staffCheckBox, internationalCheckBox;
     private ArrayList<UserModel> newUserInfo;
+    private TextView menuTitle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        //set up the toolbar
+        menuTitle = findViewById(R.id.toolbar_heading_only_heading);
+        menuTitle.setText("");
 
         staffCheckBox = findViewById(R.id.staffCheckBox);
         btnNext = findViewById(R.id.nextBtn);
