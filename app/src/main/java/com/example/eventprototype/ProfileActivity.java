@@ -25,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
         menuTitle.setText("");
 
         //set up the toolbar
-        menuTitle = findViewById(R.id.toolbar_heading_logout);
+        menuTitle = findViewById(R.id.toolbar_heading_logout_heading);
         menuTitle.setText("Dashboard");
         backBtn = findViewById(R.id.logoutIcon);
         backBtn.setOnClickListener(new View.OnClickListener() {

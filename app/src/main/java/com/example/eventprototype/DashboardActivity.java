@@ -2,6 +2,7 @@ package com.example.eventprototype;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         //set up the toolbar
-        menuTitle = findViewById(R.id.toolbar_heading_logout);
+        menuTitle = findViewById(R.id.toolbar_heading_logout_heading);
         menuTitle.setText("Dashboard");
         logoutBtn = findViewById(R.id.logoutIcon);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +50,8 @@ public class DashboardActivity extends AppCompatActivity {
 
         //set up dashboard
         dashboard = findViewById(R.id.dashboard);
+        dashboard.setBackgroundColor(Color.TRANSPARENT);
+        dashboard.loadUrl("https://unswerm.github.io/");
 
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
