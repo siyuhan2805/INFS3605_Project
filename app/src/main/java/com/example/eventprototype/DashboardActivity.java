@@ -2,6 +2,7 @@ package com.example.eventprototype;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ public class DashboardActivity extends AppCompatActivity {
         //set up dashboard
         dashboardView = findViewById(R.id.dashboardView);
         dashboardView.getSettings().setJavaScriptEnabled(true);
+        dashboardView.setBackgroundColor(Color.TRANSPARENT);
 
         /*
         String dashboardUrl = "https://prod-apsoutheast-a.online.tableau.com/t/infs3605/views/INFS3605/Dashboard1";
