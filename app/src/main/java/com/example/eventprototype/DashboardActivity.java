@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
     private TextView menuTitle;
     private ImageView logoutBtn;
     private ArrayList<UserModel> userList;
+    private WebView dashboard;
 
 
     @SuppressLint("MissingInflatedId")
@@ -44,6 +46,9 @@ public class DashboardActivity extends AppCompatActivity {
 
         //Set up nav bar
         navigationView = findViewById(R.id.navView);
+
+        //set up dashboard
+        dashboard = findViewById(R.id.dashboard);
 
         navigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
