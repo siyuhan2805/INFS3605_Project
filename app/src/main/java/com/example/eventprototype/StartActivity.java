@@ -20,7 +20,7 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         //set up the toolbar
-        menuTitle = findViewById(R.id.toolbar_heading_only);
+        menuTitle = findViewById(R.id.toolbar_heading_only_heading);
         menuTitle.setText("");
 
         btnSignUp = findViewById(R.id.startSignUpBtn);

@@ -12,7 +12,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        getSupportActionBar().hide();
 
         Intent intent = new Intent(SplashActivity.this, StartActivity.class);
         //Handler will always show the splashscreen for 1 second before switching to MainActivity

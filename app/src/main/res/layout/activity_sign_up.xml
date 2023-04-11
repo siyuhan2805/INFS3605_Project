@@ -8,9 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar_heading_only"
-        tools:layout_editor_absoluteX="-138dp"
-        tools:layout_editor_absoluteY="38dp" />
+        layout="@layout/toolbar_heading_only"/>
 
     <ImageView
         android:id="@+id/unsw_logo_w"

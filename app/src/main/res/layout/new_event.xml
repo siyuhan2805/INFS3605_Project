@@ -7,9 +7,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/toolbar_heading_backspace"
-        tools:layout_editor_absoluteX="-138dp"
-        tools:layout_editor_absoluteY="38dp" />
+        layout="@layout/toolbar_heading_backspace"/>
 
     <ImageView
         android:id="@+id/imageView2"

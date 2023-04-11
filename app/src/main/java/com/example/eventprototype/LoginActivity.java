@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -17,10 +17,7 @@ import com.example.eventprototype.Db.DatabaseHandler;
 import com.example.eventprototype.Model.UserModel;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputEditText loginPasswordEt;
@@ -32,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity activity;
     private boolean isStaff = false;
     private TextView menuTitle;
+    private Toolbar toolbar;
 
     @SuppressLint("MissingInflatedId")
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //set up the toolbar
-        menuTitle = findViewById(R.id.toolbar_heading_only);
+        toolbar = findViewById(R.id.toolbar_heading_only);
+        menuTitle = findViewById(R.id.toolbar_heading_only_heading);
         menuTitle.setText("");
 
         loginBtn = findViewById(R.id.loginBtn);
