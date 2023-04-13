@@ -59,105 +59,203 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventTitleLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="335dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="42dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Event Name"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/themeSecondaryColor"
-        app:hintTextColor="@color/white"
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="408dp"
+        android:layout_height="328dp"
+        android:layout_marginTop="16dp"
+        android:isScrollContainer="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
-        app:layout_constraintVertical_bias="0.058">
+        app:layout_constraintVertical_bias="0.039">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventTitle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/innerConstraint"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventDateLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="162dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="42dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTitleLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Event Name"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.523"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.049">
 
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="16dp"
-        android:hint="Start Date"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/themeSecondaryColor"
-        app:hintTextColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/eventStartLayout"
-        app:layout_constraintHorizontal_bias="0.535"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventTitleLayout"
-        app:startIconDrawable="@drawable/ic_baseline_calendar"
-        app:startIconTint="@color/white">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:textColor="@color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDateLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="162dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventStartLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="42dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
-        android:hint="Start Time"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/themeSecondaryColor"
-        app:hintTextColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventTitleLayout"
-        app:startIconDrawable="@drawable/ic_baseline_time"
-        app:startIconTint="@color/white">
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="16dp"
+                android:hint="Start Date"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@+id/eventStartLayout"
+                app:layout_constraintHorizontal_bias="0.535"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventTitleLayout"
+                app:startIconDrawable="@drawable/ic_baseline_calendar"
+                app:startIconTint="@color/white">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventStartTime"
-            android:focusable="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/eventLocationLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="335dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="42dp"
-        android:layout_marginTop="16dp"
-        android:hint="Location"
-        android:textColorHint="@color/white"
-        app:boxStrokeColor="@color/themeSecondaryColor"
-        app:hintTextColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventDateLayout">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventStartLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="28dp"
+                android:hint="Start Time"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventTitleLayout"
+                app:startIconDrawable="@drawable/ic_baseline_time"
+                app:startIconTint="@color/white">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/eventLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventStartTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventLocationLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginTop="16dp"
+                android:hint="Location"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventDateLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventFacultyLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginTop="16dp"
+                android:hint="Faculty"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventLocationLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventFaculty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventBudgetLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="335dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginTop="16dp"
+                app:startIconDrawable="@drawable/baseline_attach_money_24"
+                app:startIconTint="@color/white"
+                android:hint="Budget"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventFacultyLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDescLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="335dp"
+                android:layout_height="150dp"
+                android:layout_marginHorizontal="42dp"
+                android:layout_marginTop="16dp"
+                app:counterEnabled="true"
+                app:counterTextColor="@color/white"
+                app:counterMaxLength="300"
+                app:startIconTint="@color/white"
+                android:hint="Description"
+                android:textColorHint="@color/white"
+                app:boxStrokeColor="@color/themeSecondaryColor"
+                app:hintTextColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eventBudgetLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_weight="1"
+                    android:id="@+id/eventDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
     <ImageView
         android:id="@+id/eventCancelBtn"
@@ -175,16 +273,18 @@
         android:layout_width="335dp"
         android:layout_height="42dp"
         android:layout_marginStart="42dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="42dp"
+        android:layout_marginBottom="18dp"
         android:background="@drawable/rounded_button"
         android:backgroundTint="@color/themeSecondaryColor"
+        android:enabled="false"
         android:text="Save"
         android:textColor="@color/white"
-        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocationLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
