@@ -2,7 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <permission
+        android:name="your.package.name.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="your.package.name.permission.MAPS_RECEIVE"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
 
     <application
@@ -14,6 +25,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EventPrototype"
         tools:targetApi="31">
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyCOC1S9LXGKBVofosMt1gBItLTQufTijrg" />
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+
+
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -25,30 +48,24 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".StartActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".SignUpActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".SignUpExtraActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
-        </activity>
-
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

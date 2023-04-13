@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     System.out.println(userList.get(0).getUsername());
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class );
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class );
                     intent.putExtra("currentUser", userList);
                     startActivity(intent);
                 }

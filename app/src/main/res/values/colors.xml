@@ -13,6 +13,8 @@
     <color name="joinColor">#A259FF</color>
     <color name="green">#42f59b</color>
     <color name="red">#f54254</color>
+    <color name="nav_bar">#2d2833</color>
+    <color name="nav_unclicked">#a6a5a8</color>
 
 
 </resources>

@@ -12,8 +12,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +27,7 @@ import com.example.eventprototype.Db.DatabaseHandler;
 import com.example.eventprototype.Model.EngagementModel;
 import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
     private EventAdapter adapter;
     private UpcomingEventsAdapter upcomingEventsAdapter;
     private List<EventModel> eventList, upEventList;
-    private List<UserModel> currentUser;
+    private ArrayList<UserModel> currentUser;
     private DatabaseHandler db;
     private FloatingActionButton fab;
 
@@ -55,9 +58,34 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        //set the icon as selected
+        bottomNavigationView.setSelectedItemId(R.id.events);
 
-        //get the intent passed from the LoginActivity
+        //get the intent passed from either profile or dashboard
         currentUser = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
+        System.out.println(currentUser.get(0).getUsername());
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch(item.getItemId()) {
+                    case R.id.dashboard:
+                        Intent intent = new Intent(MainActivity.this, DashboardActivity.class );
+                        intent.putExtra("currentUser", currentUser);
+                        startActivity(intent);
+                        return true;
+
+                    case R.id.profile:
+                        intent = new Intent(MainActivity.this, ProfileActivity.class );
+                        intent.putExtra("currentUser", currentUser);
+                        startActivity(intent);
+                        return true;
+                }
+                return false;
+            }
+        });
+
+
         Toast.makeText(MainActivity.this, "User logged in: " + currentUser.get(0).getUsername(), Toast.LENGTH_SHORT).show();
         //initialise fab
         fab = findViewById(R.id.fab);
