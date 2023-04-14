@@ -42,7 +42,7 @@ public class DashboardActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         //set the icon as selected
         bottomNavigationView.setSelectedItemId(R.id.dashboard);
-        Fragment fragment = new SupportMapFragment();
+        Fragment fragment = new MapFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.eventMapFrame, fragment).commit();
 
         //workaround to make sure you can scroll on the Maps

@@ -47,6 +47,7 @@ public class MapFragment extends Fragment {
             public void onMapReady(@NonNull GoogleMap googleMap) {
                 map = googleMap;
                 LatLng sydney = new LatLng(listGeoCoder.get(0).getLatitude(),listGeoCoder.get(0).getLongitude());
+                map.clear();
                 System.out.println(sydney);
                 map.addMarker(new MarkerOptions().position(sydney).title("Sydeny Event"));
                 map.getUiSettings().setZoomControlsEnabled(true);
