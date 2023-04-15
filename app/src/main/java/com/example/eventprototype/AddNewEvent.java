@@ -47,7 +47,7 @@ public class AddNewEvent extends DialogFragment {
 
     public static final String TAG = "ActionBottomDialog";
 
-    private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation;
+    private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation, eventFaculty, eventBudget, eventDesc;
     private Button eventSaveBtn, eventImageBtn;
     private ImageView eventCoverPhoto;
     private ImageView eventCancelBtn;
@@ -94,6 +94,9 @@ public class AddNewEvent extends DialogFragment {
         eventSaveBtn = getView().findViewById(R.id.eventSaveBtn);
         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
+        eventFaculty = getView().findViewById(R.id.eventFaculty);
+        eventBudget = getView().findViewById(R.id.eventBudget);
+        eventDesc = getView().findViewById(R.id.eventDesc);
 
         //pass the activity to the DatabaseHandler
         db = new DatabaseHandler(getActivity());
@@ -195,6 +198,62 @@ public class AddNewEvent extends DialogFragment {
 
         });
 
+        eventFaculty.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+        eventBudget.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+
+        eventDesc.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+
 
 
         //onClick listener for when all fields are filled out
@@ -213,6 +272,12 @@ public class AddNewEvent extends DialogFragment {
                     throw new RuntimeException(e);
                 }
                 String location = eventLocation.getText().toString();
+                String faculty = eventFaculty.getText().toString();
+                String budgetString = eventBudget.getText().toString();
+                //changing the string to an int for budget
+                int budget = Integer.parseInt(budgetString);
+                String desc = eventDesc.getText().toString();
+
                 //initialise the Event object
                 EventModel event = new EventModel();
                 //setting the setters of the Event object to reflect in the RecyclerView adapter
@@ -221,6 +286,9 @@ public class AddNewEvent extends DialogFragment {
                 event.setDate(newDate);
                 event.setLocation(location);
                 event.setStatus(0);
+                event.setFaculty(faculty);
+                event.setBudget(budget);
+                event.setDesc(desc);
                 //setting the bitmap of the image selected
                 event.setEventCoverImage(imageToStore);
                 //insert the created Event into the database
@@ -329,7 +397,8 @@ public class AddNewEvent extends DialogFragment {
 
     //checks all EditText fields to see if everything is filled out, otherwise disables the save button
     public void checkRequiredFields() {
-        if (!eventTitle.getText().toString().isEmpty() && !eventStartTime.getText().toString().isEmpty() && !eventDate.getText().toString().isEmpty() && !eventLocation.getText().toString().isEmpty()) {
+        if (!eventTitle.getText().toString().isEmpty() && !eventStartTime.getText().toString().isEmpty() && !eventDate.getText().toString().isEmpty() && !eventLocation.getText().toString().isEmpty()
+        && !eventFaculty.getText().toString().isEmpty() && !eventBudget.getText().toString().isEmpty() && !eventDesc.getText().toString().isEmpty()) {
             eventSaveBtn.setEnabled(true);
         }
         else {

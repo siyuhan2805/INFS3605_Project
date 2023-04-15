@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ import java.util.Locale;
 public class EditEvent extends DialogFragment {
     public static final String TAG = "ActionBottomDialog";
 
-    private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation;
+    private TextInputEditText eventTitle, eventStartTime, eventDate, eventLocation, eventFaculty, eventBudget, eventDesc;
     private EventModel editEvent;
     private Button eventSaveBtn, eventImageBtn;
     private ImageView eventCoverPhoto;
@@ -68,7 +69,7 @@ public class EditEvent extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.new_event, container, false);
         //re-adjust the keyboard when typing
-        //getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return view;
     }
 
@@ -89,11 +90,22 @@ public class EditEvent extends DialogFragment {
         eventSaveBtn = getView().findViewById(R.id.eventSaveBtn);
         eventCancelBtn = getView().findViewById(R.id.eventCancelBtn);
         eventImageBtn = getView().findViewById(R.id.eventImageBtn);
+        eventFaculty = getView().findViewById(R.id.eventFaculty);
+        eventBudget = getView().findViewById(R.id.eventBudget);
+        eventDesc = getView().findViewById(R.id.eventDesc);
+
 
         //setting the fields to the event that the user clicked on
         eventCoverPhoto.setImageBitmap(editEvent.getEventCoverImage());
         eventTitle.setText(editEvent.getEvent());
         eventStartTime.setText(editEvent.getStartTime());
+        eventFaculty.setText(editEvent.getFaculty());
+        //to store budget as int before converting to string
+        int intBudget = editEvent.getBudget();
+        String budget = String.valueOf(intBudget);
+        eventBudget.setText(budget);
+        eventDesc.setText(editEvent.getDesc());
+
         try {
             String updatedDate = convertDateFormat(editEvent.getDate());
             eventDate.setText(updatedDate);
@@ -206,6 +218,62 @@ public class EditEvent extends DialogFragment {
 
         });
 
+        eventFaculty.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+        eventBudget.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+
+        eventDesc.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkRequiredFields();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+
+        });
+
 
         //onClick listener for when all fields are filled out
         eventSaveBtn.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +291,14 @@ public class EditEvent extends DialogFragment {
                     throw new RuntimeException(e);
                 }
                 String location = eventLocation.getText().toString();
+                String faculty = eventFaculty.getText().toString();
+                String budgetString = eventBudget.getText().toString();
+                //changing the string to an int for budget
+                int budget = Integer.parseInt(budgetString);
+                String desc = eventDesc.getText().toString();
+                db.updateFaculty(editEvent.getId(), faculty);
+                db.updateBudget(editEvent.getId(), budget);
+                db.updateDesc(editEvent.getId(), desc);
                 db.updateStatus(editEvent.getId(), 0);
                 db.updateEvent(editEvent.getId(), title);
                 db.updateStartTime(editEvent.getId(), startTime);
@@ -329,7 +405,8 @@ public class EditEvent extends DialogFragment {
 
     //checks all EditText fields to see if everything is filled out, otherwise disables the save button
     public void checkRequiredFields() {
-        if (!eventTitle.getText().toString().isEmpty() && !eventStartTime.getText().toString().isEmpty() && !eventDate.getText().toString().isEmpty() && !eventLocation.getText().toString().isEmpty()) {
+        if (!eventTitle.getText().toString().isEmpty() && !eventStartTime.getText().toString().isEmpty() && !eventDate.getText().toString().isEmpty() && !eventLocation.getText().toString().isEmpty()
+        && !eventFaculty.getText().toString().isEmpty() && !eventBudget.getText().toString().isEmpty() && !eventDesc.getText().toString().isEmpty()) {
             eventSaveBtn.setEnabled(true);
         }
         else {
@@ -361,10 +438,6 @@ public class EditEvent extends DialogFragment {
         return newDate;
     }
 
-    //method to update the engagements for all users
-    public void updateEngagements() {
-
-    }
 
 
 

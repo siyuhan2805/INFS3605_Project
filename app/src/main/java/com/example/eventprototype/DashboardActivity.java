@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.example.eventprototype.Model.UserModel;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -27,6 +28,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private NestedScrollView dashScroll;
     private ImageView transparent;
+    private TextView dashUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         dashScroll = findViewById(R.id.dashScroll);
         transparent = findViewById(R.id.imageTrans);
+        dashUser = findViewById(R.id.dashUser);
+
+        //sets the name of the user that is logged in on the front screen
+        dashUser.setText("Hello " + currentUser.get(0).getFirstName());
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         //set the icon as selected

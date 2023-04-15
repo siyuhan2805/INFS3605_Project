@@ -1,5 +1,6 @@
 package com.example.eventprototype.Model;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
+@SuppressLint("ParcelCreator")
 public class EventModel implements Serializable, Parcelable {
     private int id, status;
     //"event" is the name of the event in SQLITE
@@ -17,6 +19,34 @@ public class EventModel implements Serializable, Parcelable {
     private String location;
     private String startTime;
     private String date;
+    private String faculty;
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+
+    private String desc;
+    private int budget;
     private Bitmap eventCoverImage;
 
 
