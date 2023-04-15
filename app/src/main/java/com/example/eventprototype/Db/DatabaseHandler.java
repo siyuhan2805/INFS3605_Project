@@ -400,6 +400,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return userEventList;
     }
 
+    @SuppressLint("Range")
+    public List<EventModel> budgetFaculty() {
+        List<EventModel> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT DISTINCT " + FACULTY + ", " + "SUM(" + BUDGET + ") AS " + BUDGET + " FROM " + EVENT_TABLE + " GROUP BY " + FACULTY , null);
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        EventModel facultyBudget = new EventModel();
+                        facultyBudget.setFaculty(cursor.getString(cursor.getColumnIndex(FACULTY)));
+                        facultyBudget.setBudget(cursor.getInt(cursor.getColumnIndex(BUDGET)));
+                        data.add(facultyBudget);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return data;
+    }
+
+    @SuppressLint("Range")
+    public List<EventModel> engagementCountry() {
+        List<EventModel> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + LOCATION  + ", " + "SUM(" + ISJOIN + ")" + " AS " + ISJOIN
+                + " FROM " + EVENT_TABLE + " JOIN " + ENGAGEMENT_TABLE + " ON " + "eventList.eventId = engagement.eventId "
+                + "WHERE " + "engagement.isJoin = 1 "
+                + "GROUP BY " + LOCATION, null);
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        EventModel engagement = new EventModel();
+                        engagement.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
+                        engagement.setIsJoin(cursor.getInt(cursor.getColumnIndex(ISJOIN)));
+                        data.add(engagement);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return data;
+    }
+
 
     public void updateEngagement(int userId, int eventId, int isJoin) {
         ContentValues cv = new ContentValues();
@@ -483,6 +540,4 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void deleteEngagement(int userId, int eventId) {
         db.delete(ENGAGEMENT_TABLE, EVENT_ID + "=? AND " + USER_ID + "=?", new String[] {String.valueOf(eventId), String.valueOf(userId)});
     }
-
-
 }
