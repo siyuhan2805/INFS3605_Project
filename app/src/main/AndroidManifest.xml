@@ -66,6 +66,10 @@
             android:name=".SignUpExtraActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

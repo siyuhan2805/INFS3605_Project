@@ -457,6 +457,91 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return data;
     }
 
+    @SuppressLint("Range")
+    public List<UserModel> domesticUsers() {
+        List<UserModel> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + "COUNT(" + INTERNATIONAL + ")" + " AS " + INTERNATIONAL
+                + " FROM " + USER_TABLE
+                + " WHERE " + INTERNATIONAL + " = 0", null);
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        UserModel users = new UserModel();
+                        users.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                        data.add(users);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return data;
+    }
+
+    @SuppressLint("Range")
+    public List<UserModel> internationalUsers() {
+        List<UserModel> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + "COUNT(" + INTERNATIONAL + ")" + " AS " + INTERNATIONAL
+                + " FROM " + USER_TABLE
+                + " WHERE " + INTERNATIONAL + " = 1", null);
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        UserModel users = new UserModel();
+                        users.setIsInternational(cursor.getInt(cursor.getColumnIndex(INTERNATIONAL)));
+                        data.add(users);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return data;
+    }
+
+    @SuppressLint("Range")
+    public List<EventModel> eventFaculty() {
+        List<EventModel> data = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT " + FACULTY + ", " + "COUNT(" + EVENT + ")" + " AS " + ISJOIN
+                + " FROM " + EVENT_TABLE
+                + " GROUP BY " + FACULTY, null);
+        db.beginTransaction();
+        try {
+            //return all the rows from the db without any criteria
+            //cursor is the current row being pointed to in the SQL result
+            if (cursor != null) {
+                //moveToFirst will return false if the first line pointed to by the cursor is empty
+                if (cursor.moveToFirst()) {
+                    do {
+                        EventModel events = new EventModel();
+                        events.setFaculty(cursor.getString(cursor.getColumnIndex(FACULTY)));
+                        events.setIsJoin(cursor.getInt(cursor.getColumnIndex(ISJOIN)));
+                        data.add(events);
+                    }while (cursor.moveToNext());
+                }
+            }
+        }
+        finally {
+            db.endTransaction();
+            cursor.close();
+        }
+        return data;
+    }
+
 
     public void updateEngagement(int userId, int eventId, int isJoin) {
         ContentValues cv = new ContentValues();

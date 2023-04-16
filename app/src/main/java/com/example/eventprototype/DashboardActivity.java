@@ -1,5 +1,6 @@
 package com.example.eventprototype;
 
+import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
@@ -22,12 +23,17 @@ import com.example.eventprototype.Model.EventModel;
 import com.example.eventprototype.Model.UserModel;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -45,8 +51,9 @@ public class DashboardActivity extends AppCompatActivity {
     private ImageView transparent;
     private TextView dashUser;
 
-    private BarChart dashFacBudget;
+    private BarChart dashFacBudget, dashEvents;
     private HorizontalBarChart dashEngagement;
+    private PieChart dashUsersCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +63,13 @@ public class DashboardActivity extends AppCompatActivity {
         currentUser = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
         System.out.println(currentUser.get(0).getUsername());
 
+        dashUsersCat = findViewById(R.id.dashUsersCat);
         dashScroll = findViewById(R.id.dashScroll);
         transparent = findViewById(R.id.imageTrans);
         dashUser = findViewById(R.id.dashUser);
         dashFacBudget = findViewById(R.id.dashFacBudget);
         dashEngagement = findViewById(R.id.dashEngagement);
+        dashEvents = findViewById(R.id.dashEvents);
 
         //initialise db
         db = new DatabaseHandler(this);
@@ -159,6 +168,23 @@ public class DashboardActivity extends AppCompatActivity {
         dashFacBudget.getAxisRight().setEnabled(false);
         yAxis.setTextColor(Color.WHITE);
 
+        //events bar chart
+        List<EventModel> eventData = db.eventFaculty();
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
+
+        for (int i = 0; i < eventData.size(); i++) {
+            System.out.println(eventData.get(i).getIsJoin());
+            System.out.println(eventData.get(i).getFaculty());
+            entries.add(new BarEntry(i, eventData.get(i).getIsJoin()));
+            labels.add(eventData.get(i).getFaculty());
+        }
+
+        //calling method for faculty events
+        eventsBarChart(entries, labels);
+
+
+
         //engagement bar chart
         List<EventModel> eData = db.engagementCountry();
         ArrayList<BarEntry> xValues = new ArrayList<>();
@@ -168,6 +194,21 @@ public class DashboardActivity extends AppCompatActivity {
             yValues.add(eData.get(i).getLocation());
         }
 
+
+        //calling method to set horizontal chart
+        hBarChart(xValues, yValues);
+
+        //domestic vs internation pie chart
+        List<UserModel> domesticUsers = db.domesticUsers();
+        List<UserModel> internationalUsers = db.internationalUsers();
+        ArrayList<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry(domesticUsers.get(0).getIsInternational(), "Domestic"));
+        pieEntries.add(new PieEntry(internationalUsers.get(0).getIsInternational(), "International"));
+        //calling method to set pie chart
+        setPieChart(pieEntries);
+    }
+
+    public void hBarChart(ArrayList<BarEntry> xValues, ArrayList<String> yValues) {
         BarDataSet hBarDataSet = new BarDataSet(xValues, null);
         hBarDataSet.setValueTextColor(Color.WHITE);
         hBarDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -189,16 +230,54 @@ public class DashboardActivity extends AppCompatActivity {
         xAxisH.setLabelCount(yValues.size());
         //set Y Axis formatter
         YAxis yAxisH = dashEngagement.getAxisLeft();
-        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        hBarDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         dashEngagement.getAxisRight().setEnabled(false);
         yAxisH.setTextColor(Color.WHITE);
-
-
-
-
-
-
-
-
     }
+
+    public void eventsBarChart(ArrayList<BarEntry> x, ArrayList<String> y) {
+        BarDataSet barDataSet = new BarDataSet(x, null);
+        barDataSet.setValueTextColor(Color.WHITE);
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        Description description = new Description();
+        description.setText("Event Count per Faculty");
+        description.setTextColor(Color.WHITE);
+        dashEvents.setDescription(description);
+        BarData barData = new BarData(barDataSet);
+        dashEvents.setData(barData);
+        //set X Axis formatter
+        XAxis xAxis = dashEvents.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(y));
+        //set position of labels
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setGranularity(1f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setLabelCount(y.size());
+        //set Y Axis formatter
+        YAxis yAxis = dashEvents.getAxisLeft();
+        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        dashEvents.getAxisRight().setEnabled(false);
+        yAxis.setTextColor(Color.WHITE);
+    }
+
+
+    public void setPieChart(ArrayList<PieEntry> pieEntries) {
+            PieDataSet pieDataSet = new PieDataSet(pieEntries, null);
+        Description desc = new Description();
+        desc.setText("Users by category");
+        desc.setTextColor(Color.WHITE);
+        PieData pieData = new PieData(pieDataSet);
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setValueTextSize(12f);
+        Legend legend = dashUsersCat.getLegend();
+        legend.setTextColor(Color.WHITE);
+        dashUsersCat.setDescription(desc);
+        dashUsersCat.setData(pieData);
+    }
+
+
+
 }
