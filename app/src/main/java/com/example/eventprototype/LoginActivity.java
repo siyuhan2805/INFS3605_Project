@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
     private AppCompatButton signUpBtn;
     private ArrayList<UserModel> userList;
+    private ArrayList<UserModel> currentUser;
     private DatabaseHandler db;
     private LoginActivity activity;
     private boolean isStaff = false;
@@ -49,6 +50,19 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
         db.openDatabase();
 
+     /*
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //userList = (ArrayList<UserModel>) db.getUser("z5260197", "123456");
+                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class );
+                //intent.putExtra("currentUser", userList);
+                startActivity(intent);
+            }
+        });
+*/
+
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){
@@ -62,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     System.out.println(userList.get(0).getUsername());
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class );
+                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class );
                     intent.putExtra("currentUser", userList);
                     startActivity(intent);
                 }

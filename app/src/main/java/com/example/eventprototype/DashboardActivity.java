@@ -20,7 +20,7 @@ public class DashboardActivity extends AppCompatActivity {
     private NavigationBarView navigationView;
     private TextView menuTitle;
     private ImageView logoutBtn;
-    private ArrayList<UserModel> userList;
+    private ArrayList<UserModel> currentUser;
 
 
     @SuppressLint("MissingInflatedId")
@@ -28,6 +28,9 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        //get the intent passed from the LoginActivity
+        //currentUser = (ArrayList<UserModel>) getIntent().getSerializableExtra("currentUser");
 
         //set up the toolbar
         menuTitle = findViewById(R.id.toolbar_heading_logout);
@@ -53,25 +56,25 @@ public class DashboardActivity extends AppCompatActivity {
                     case R.id.nav_profile:
                         intent = new Intent(DashboardActivity.this,
                                 ProfileActivity.class);
-                        intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", currentUser);
                         startActivity(intent);
                         break;
                     case R.id.nav_add_event:
                         intent = new Intent(DashboardActivity.this,
                                 AddNewEvent.class);
-                        intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", currentUser);
                         startActivity(intent);
                         break;
                     case R.id.nav_home:
                         intent = new Intent(DashboardActivity.this,
                                 DashboardActivity.class);
-                        intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", currentUser);
                         startActivity(intent);
                         break;
                     case R.id.nav_feed:
                         intent = new Intent(DashboardActivity.this,
                                 MainActivity.class);
-                        intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", currentUser);
                         startActivity(intent);
                         break;
                     case R.id.nav_data:
