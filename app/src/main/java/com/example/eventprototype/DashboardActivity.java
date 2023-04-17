@@ -75,7 +75,7 @@ public class DashboardActivity extends AppCompatActivity {
                     case R.id.nav_add_event:
                         intent = new Intent(DashboardActivity.this,
                                 AddNewEvent.class);
-                        intent.putExtra("currentUser", userList);
+                        intent.putExtra("currentUser", currentUser);
                         startActivity(intent);
                         break;
                     case R.id.nav_home:
