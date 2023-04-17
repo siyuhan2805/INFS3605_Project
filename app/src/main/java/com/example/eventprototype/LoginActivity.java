@@ -50,19 +50,19 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseHandler(this);
         db.openDatabase();
 
-     /*
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //userList = (ArrayList<UserModel>) db.getUser("z5260197", "123456");
                 Intent intent = new Intent(LoginActivity.this, DashboardActivity.class );
-                //intent.putExtra("currentUser", userList);
+                userList = (ArrayList<UserModel>) db.getUser("z123456", "123456");
+                intent.putExtra("currentUser", userList);
                 startActivity(intent);
             }
         });
-*/
 
 
+/*
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v){
@@ -82,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+ */
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
